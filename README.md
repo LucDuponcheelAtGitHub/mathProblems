@@ -11,25 +11,27 @@ Consider the following [picture](https://github.com/LucDuponcheelAtGitHub/mathPr
 The ratio of the lenghts of the sides of the blue rectangle is `sqrt(2)` (cfr. A4 paper).
 
 The size of the angle between the green lines, through the point on the ellipse
-and a focus of the ellipse, is, as indicated, `π/3` (`60` degrees).
+and a focuses of the ellipse, is, as indicated, `π/3` (`60` degrees).
 
-What is size of the angle between the green slope through the point on the ellipse 
-and the horizontal line (not shown) through the focuses of the ellipse?
+*What is size of the angle between the green slope through the point on the*
+*ellipse and the horizontal line (not shown) through the focuses of the ellipse?*
 
 The answer, as you can guess from the picture, is `π/4` (`45` degrees`).
 
-*Can you derive it?*
+*Can you derive the property?*
 
 The same property holds, of course, for the point (not shown) on the ellipse
-which is symmetric w.r.t. the middle point (not shown) of the ellipse.
+which is symmetric w.r.t. the center (not shown) of the ellipse.
 
 Many other interesting properties follow from this property.
 
 For example: the lenghts of the two blue dashed lines are equal.
 
-I have implemented the derivation of a solution (for the symmetric point).
+Maybe you can think of other interesting properties, perhaps by drawing extra lines.
 
-I also tested the correctness of the derivations and the obtained values.
+I have implemented a derivation of the property(for the symmetric point).
+
+I also tested the correctness of the derivation and the obtained values.
 
 ```scala
 sbt:specialEllipse> test
