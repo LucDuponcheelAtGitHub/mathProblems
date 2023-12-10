@@ -11,7 +11,7 @@ Consider the following [picture](https://github.com/LucDuponcheelAtGitHub/mathPr
 The ratio of the lenghts of the sides of the blue rectangle is `sqrt(2)` (cfr. A4 paper).
 
 The size of the angle between the green lines, through the point on the ellipse
-and a focus of the ellipse, is, as indicated, `π/3` (`60` degrees`).
+and a focus of the ellipse, is, as indicated, `π/3` (`60` degrees).
 
 What is size of the angle between the green slope through the point on the ellipse 
 and the horizontal line (not shown) through the focuses of the ellipse?
