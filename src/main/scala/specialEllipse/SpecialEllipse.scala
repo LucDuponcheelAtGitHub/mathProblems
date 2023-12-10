@@ -12,16 +12,17 @@ import scala.math.*
 //
 // for example in
 // sqrt(1.0 + 3.0) = sqrt(4.0) = 2.0
-// and also in
 //
+// and also in
 // π/(2.0*2.0) resp. π/(2.0*3.0) (π/4.0 resp. π/6)
 //
 
-// the general equation of an ellipse is x*x/a*a + y*y/b*b = 1
+// the general equation of an ellipse
+// with major axis a and minor axis b
+// is x*x/a*a + y*y/b*b = 1
 //
-// for the special ellipse we have 1 = a < b = 1/sqrt(2) (cfr A4 paper)
-//
-// the equation of the special ellipse is x*x + 2*y*y = 1 
+// for the special ellipse we have 1 = a < b = 1/sqrt(2) (cfr A4 paper) and
+// therefore equation of the special ellipse is x*x + 2*y*y = 1 
 
 val π: Double = Pi
 
@@ -36,12 +37,13 @@ val derivingAngleBetweenFocusLinesAt: Point => List[Double] =
   val angleBetweenFocusLinesAt: Point => Double = (x, y) =>
     atan(slopeOfLeftFocusLinesAt(x, y)) - atan(slopeOfRightFocusLinesAt(x, y))
 
+  // tan(α - β) = (tan(α) - tan(β))/(1.0 + tan(α) * tan(β))
   (x, y) =>
     List(
-      atan(tan(angleBetweenFocusLinesAt(x, y))),
+      angleBetweenFocusLinesAt(x, y),
       // = ...
+      atan(tan(angleBetweenFocusLinesAt(x, y))),
       atan(tan(atan(slopeOfLeftFocusLinesAt(x, y)) - atan(slopeOfRightFocusLinesAt(x, y)))),
-      // tan(α - β) = (tan(α) - tan(β))/(1.0 + tan(α) * tan(β))
       atan(tan(atan(y/(x + 1.0/sqrt(2.0))) - atan(y/(x - 1.0/sqrt(2.0))))),
       atan((tan(atan(y/(x + 1.0/sqrt(2.0)))) - tan(atan(y/(x - 1.0/sqrt(2.0))))) / 
       (1.0 + tan(atan(y/(x - 1.0/sqrt(2.0)))) * tan(atan(y/(x + 1.0/sqrt(2.0)))))),
@@ -52,12 +54,11 @@ val derivingAngleBetweenFocusLinesAt: Point => List[Double] =
       atan((- y/sqrt(2.0) - y/sqrt(2.0))/(x*x - 1.0/2.0 + y*y)),
       atan((- y/sqrt(2.0) - y/sqrt(2.0))/(1.0 - 2.0 * y*y - 1.0/2.0 + y*y)),
       atan((- y/sqrt(2.0) - y/sqrt(2.0))/(1.0/2.0 - y*y)),
-      // // ... = 
+      // // ...
       atan((-2.0 * y/sqrt(2.0))/(1.0/2.0 - y*y))
     )
 
 // for tan(π/3.0) = sqrt(3.0)
-//
 // using slope equal to (-2.0 * y/sqrt(2.0))/(1.0/2.0 - y*y)
 // and (for convenience) multplying by sqrt(2.0)
 val derivingEquationForYAt: Point => List[Double] =
@@ -88,7 +89,7 @@ val derivingSolutionForX: List[Double] = List(
 
 // ∃γ P = (cos(γ), sin(γ)/sqrt(2.0))
 // the slope of the tangent at P is -sin(γ) / (cos(γ)/sqrt(2.0))
-// in other words, without using γ
+// in other words, without using γ,
 // the slope of the tangent at P is -(y*sqrt(2.0)) / (x/sqrt(2.0))
 val derivingAngleOfTangent: List[Double] = List(
   atan((1.0/sqrt(2.0*3.0)*sqrt(2.0)) / ((sqrt(2.0/3.0))/sqrt(2.0))),
