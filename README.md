@@ -1,12 +1,12 @@
 # Math Problems
 
-My twin brither, Marc, has often send me interesting math problems.
+My twin brither, Marc, has often has sent me an interesting math problem.
 
-From time to time I tried to solve them using Scala code as a tool.
+From time to time I have tried to solve it using Scala code as a tool.
 
 ## Special Ellipse
 
-Consider the following [picture](png/ellipse.png).
+Consider the following [picture](https://github.com/LucDuponcheelAtGitHub/mathProblems/blob/master/png/ellipse.png).
 
 The ratio of the lenghts of the sides of the blue rectangle is `sqrt(2)` (cfr. A4 paper).
 
