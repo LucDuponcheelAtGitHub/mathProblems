@@ -1,8 +1,8 @@
 # Math Problems
 
-My twin brother, Marc, has often has sent me an interesting math problem.
+My twin brother, Marc, often sends me an interesting math problem.
 
-From time to time I have tried to solve it using Scala code as a tool.
+From time to time I try to solve it using Scala code as a tool.
 
 ## Special Ellipse
 
