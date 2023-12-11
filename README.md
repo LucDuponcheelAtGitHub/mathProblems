@@ -27,7 +27,8 @@ Many other interesting properties follow from this property.
 
 For example: the lenghts of the two blue dashed lines are equal.
 
-Maybe you can think of other interesting properties, perhaps by drawing extra lines.
+Maybe you can think of other interesting properties,
+perhaps by drawing extra lines or circles.
 
 I have implemented a derivation of the property(for the symmetric point).
 
