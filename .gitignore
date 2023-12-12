@@ -33,4 +33,4 @@ metals.sbt
 
 # Temporary entries as long as not finished
 
-src/main/scala/secretCombination
+# src/main/scala/secretCombination
