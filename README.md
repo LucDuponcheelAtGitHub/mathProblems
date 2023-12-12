@@ -34,22 +34,19 @@ I have implemented a derivation of the property(for the symmetric point).
 
 I also tested the correctness of the derivation and the obtained values.
 
+For the moment only `specialEllipse.main` is involved.
+
 ```scala
-sbt:specialEllipse> test
-[info] Tests:
-[info] - verify deriving angle between focus lines at P
-[info] - deriving equation for y at P
-[info] - verify deriving solution for y at P if α == π/3.0
-[info] - verify deriving solution for x at P if α == π/3.0
-[info] - verify deriving angle of tangent at P if α == π/3.0
-[info] - P is on ellipse
-[info] - angle between focus lines at P is π/3.0
-[info] - angle of tangent at P is π/4.0
-[info] Run completed in 98 milliseconds.
-[info] Total number of tests run: 8
-[info] Suites: completed 1, aborted 0
-[info] Tests: succeeded 8, failed 0, canceled 0, ignored 0, pending 0
-[info] All tests passed.
+sbt:mathProblems> run
+[info] running specialEllipse.main
+deriving angle between focus lines at P is OK
+deriving equation for y at P is OK
+deriving solution for y at P if α == π/3.0 is OK
+deriving solution for x at P if α == π/3.0 is OK
+deriving angle of tangent at P if α == π/3.0 is OK
+P is on ellipse is OK
+angle between focus lines at P is π/3.0 is OK
+angle of tangent at P is π/4.0 is OK
 [success]
 ```
 

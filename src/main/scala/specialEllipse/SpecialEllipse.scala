@@ -96,3 +96,64 @@ val derivingAngleOfTangent: List[Double] = List(
   atan((1.0/(sqrt(3.0)))/(1.0/sqrt(3.0))),
   atan(1.0)
 )
+
+@main def main() =
+
+  val ε: Double = 0.00000000000001
+
+  extension (l: Double) def ~(r: Double): Boolean = abs(l - r) < ε
+
+  val allEqual: List[Double] => Boolean = ds => ds.forall(d => d ~ ds(0))
+
+  // P = (sqrt(2.0/3.0), -1.0/sqrt(2.0*3.0))
+  // P should be on the ellipse
+  //
+  // note that P is not the point shown on the ellipse of the image,
+  // it is the point (not shown) on the ellipse which is
+  // symmetric w.r.t. the center of the ellipse (also not shown)
+
+  val x: Double = derivingSolutionForX.last
+
+  val y: Double = derivingSolutionForY.last
+
+  val P: Point = (x, y)
+
+  import test.test
+
+  test("deriving angle between focus lines at P") {
+    allEqual(derivingAngleBetweenFocusLinesAt(P))
+  }
+
+  test("deriving equation for y at P") {
+    allEqual(derivingEquationForYAt(P))
+  }
+
+  test("deriving solution for y at P if α == π/3.0") {
+    allEqual(derivingSolutionForY)
+  }
+
+  test("deriving solution for x at P if α == π/3.0") {
+    allEqual(derivingSolutionForX)
+  }
+
+  test("deriving angle of tangent at P if α == π/3.0") {
+    allEqual(derivingAngleOfTangent)
+  }
+
+  val v = x*x + 2.0*y*y
+
+  test("P is on ellipse") {
+    v ~ 1.0
+  }
+
+  val α: Double = derivingAngleBetweenFocusLinesAt(P).last
+
+  test("angle between focus lines at P is π/3.0") {
+    α ~ (π/3.0)
+  }
+
+  val γ: Double = derivingAngleOfTangent.last
+  
+  test("angle of tangent at P is π/4.0") {
+    γ ~ (π/4.0)
+  }
