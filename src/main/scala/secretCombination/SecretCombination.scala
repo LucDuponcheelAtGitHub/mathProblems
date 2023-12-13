@@ -1,5 +1,20 @@
 package secretCombination
 
+import scala.math
+
+val squaresUpTo: Int => List[Int] = n =>
+  (for { k <- 1 to n } yield { k * k }).toList
+
+val sumOfSquares: List[Int] => Double =
+  zs =>
+    {
+      for {
+        z <- zs
+      } yield {
+        z * z
+      }
+    }.sum
+
 import math.Numeric.Implicits.infixNumericOps
 
 import math.Ordering.Implicits.infixOrderingOps
@@ -126,10 +141,12 @@ val combinations: Int => Int => List[List[Int]] =
         } yield {
           choice
         }
+      val squares = squaresUpTo(n * m)
       val filteredChoicesWithUniqueSumForProductAndWithUniqueSubtractions: List[List[Int]] =
         for {
           choice <- filteredChoicesWithUniqueSumForProduct
           if (uniqueSubtractions(filteredChoicesWithUniqueSumForProduct)(choice))
+          if(squares.contains(sumOfSquares(choice)))
         } yield {
           choice
         }
