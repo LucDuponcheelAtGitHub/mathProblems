@@ -2,188 +2,171 @@ package secretCombination
 
 import scala.math
 
-val squaresUpTo: Int => List[Int] = n =>
-  (for { k <- 1 to n } yield { k * k }).toList
-
-val sumOfSquares: List[Int] => Double =
-  zs =>
-    {
-      for {
-        z <- zs
-      } yield {
-        z * z
-      }
-    }.sum
-
-import math.Numeric.Implicits.infixNumericOps
-
-import math.Ordering.Implicits.infixOrderingOps
-
 def unique[Z]: List[Z] => Boolean =
   case List(z) => true
   case _       => false
 
 def notUnique[Z]: List[Z] => Boolean = zs => !(unique(zs))
 
-def ascending: List[Int] => Boolean =
+type Choices = List[Int]
+
+def strictlyAscending: Choices => Boolean =
   case Nil      => true
   case _ :: Nil => true
-  case z :: zs  => ascending(zs) && z < zs.head
+  case z :: zs  => strictlyAscending(zs) && z < zs.head
 
-val choices: Int => Int => List[List[Int]] =
+val choices: Int => Int => List[Choices] =
   n =>
     case 0 => List(List())
     case m =>
       (for {
         z <- 1 to n
         zs <- choices(n)(m - 1)
-        if (ascending(z :: zs))
+        if (strictlyAscending(z :: zs))
       } yield {
         z :: zs
       }).toList
 
-val products: List[(List[Int], Int, Int)] => List[Int] =
-  triples =>
+type Sum = Int
+
+type Product = Int
+
+val choicesWithSumsAndProducts: Tuple2[Int, Int] => List[(Choices, Sum, Product)] =
+  (n, m) =>
     for {
-      (zs, s, p) <- triples
+      choice <- choices(n)(m)
     } yield {
-      p
+      (choice, choice.sum, choice.product)
     }
 
-val uniqueProducts: List[(List[Int], Int, Int)] => List[Int] =
-  triples =>
-    val theProducts = products(triples)
-    for {
-      p1 <- theProducts
-      if unique(
-        for {
-          p2 <- theProducts
-          if p1 == p2
-        } yield {
-          p2
-        }
-      )
-    } yield {
-      p1
-    }
-
-val choicesWithSumsAndProducts: Int => Int => List[(List[Int], Int, Int)] =
-  n =>
-    m =>
-      for {
-        choice <- choices(n)(m)
-      } yield {
-        (choice, choice.sum, choice.product)
-      }
-
-val productsForSum: Int => List[(List[Int], Int, Int)] => List[Int] =
+val productsForSum: Int => List[(Choices, Sum, Product)] => Choices =
   s1 =>
-    triples =>
+    csps =>
       for {
-        (zs, s2, p) <- triples
+        (cs, s2, p) <- csps
         if s1 == s2
       } yield {
         p
       }
 
-val sumsForProduct: Int => List[(List[Int], Int, Int)] => List[Int] =
+val sumsForProduct: Int => List[(Choices, Sum, Product)] => Choices =
   p1 =>
-    triples =>
+    csps =>
       for {
-        (zs, s, p2) <- triples
+        (cs, s, p2) <- csps
         if p1 == p2
       } yield {
         s
       }
 
-def subtractions: List[Int] => List[Int] =
-  zs =>
+val subtractions: Choices => Choices =
+  cs =>
     for {
-      z <- zs.init
+      c <- cs.init
     } yield {
-      zs(zs.indexOf(z) + 1) - z
+      cs(cs.indexOf(c) + 1) - c
     }
 
 // you can choose between forall and exists
-val subtractionsDiffer: List[Int] => List[Int] => Boolean =
-  // zs1 => zs2 => subtractions(zs1).zip(subtractions(zs2)).forall(_ != _)
-  zs1 => zs2 => subtractions(zs1).zip(subtractions(zs2)).exists(_ != _)
+val subtractionsDiffer: Choices => Choices => Boolean =
+  // cs1 => cs2 => subtractions(cs1).zip(subtractions(cs2)).forall(_ != _)
+  cs1 => cs2 => subtractions(cs1).zip(subtractions(cs2)).exists(_ != _)
 
-val uniqueSubtractions: List[List[Int]] => List[Int] => Boolean =
-  zss2 =>
-    zs1 =>
+val uniqueSubtractions: List[Choices] => Choices => Boolean =
+  css2 =>
+    cs1 =>
       (for {
-        zs2 <- zss2
-        if (zs1 != zs2)
+        cs2 <- css2
+        if (cs1 != cs2)
       } yield {
-        zs2
-      }).forall(subtractionsDiffer(zs1))
+        cs2
+      }).forall(subtractionsDiffer(cs1))
 
-val combinations: Int => Int => List[List[Int]] =
-  n =>
-    m =>
-      val theChoicesWithSumsAndProducts: List[(List[Int], Int, Int)] = choicesWithSumsAndProducts(n)(m)
-      val filteredChoicesWithSumsAndProducts: List[(List[Int], Int, Int)] =
-        for {
-          (choice, sum, product) <- theChoicesWithSumsAndProducts
-          if ((for {
-            product <- productsForSum(sum)(theChoicesWithSumsAndProducts)
-          } yield {
-            sumsForProduct(product)(theChoicesWithSumsAndProducts)
-          }).exists(notUnique))
-        } yield {
-          (choice, sum, product)
-        }
-      val filteredChoicesWithUniqueSumForProduct: List[List[Int]] =
-        for {
-          (choice, sum, product) <- filteredChoicesWithSumsAndProducts
-          if (unique(sumsForProduct(product)(filteredChoicesWithSumsAndProducts)))
-        } yield {
-          choice
-        }
-      val squares = squaresUpTo(n * m)
-      val filteredChoicesWithUniqueSumForProductAndWithUniqueSubtractions: List[List[Int]] =
-        for {
-          choice <- filteredChoicesWithUniqueSumForProduct
-          if (uniqueSubtractions(filteredChoicesWithUniqueSumForProduct)(choice))
-          if(squares.contains(sumOfSquares(choice)))
-        } yield {
-          choice
-        }
-      filteredChoicesWithUniqueSumForProductAndWithUniqueSubtractions
+// alice betty and colin are sitting together
 
-val numbers: Int => Int => List[((Int, Int), List[Int])] =
-  n =>
-    m =>
-      (for {
-        l <- 1 to n
-        k <- 1 to m
-        theCombinations = combinations(l)(k)
-        if (unique(theCombinations))
-      } yield {
-        ((l, k), theCombinations.head)
-      }).toList
+// alice tells betty and colin that the combination,
+// consisting of m strictly ascending natural numbers between 1 to n,
+// is one you cannot find from any sum
+val alice: List[(Choices, Sum, Product)] => List[(Choices, Sum, Product)] =
+  csps =>
+    val aliceFilter: Sum => Boolean =
+      s => 
+        (for {
+          p <- productsForSum(s)(csps)
+        } yield {
+          sumsForProduct(p)(csps)
+        }).exists(notUnique)
+    for {
+      (c, s, p) <- csps
+      if (aliceFilter(s))
+    } yield {
+      (c, s, p)
+    }
+
+// alice gives the product to betty and tells betty and colin that
+// betty should know how to find the combination from that product
+// (colin does not know the product (yet))
+val betty: List[(Choices, Sum, Product)] => List[Choices] =
+  csps =>
+    val bettyFilter: Product => Boolean = 
+      p => unique(sumsForProduct(p)(csps))
+    for {
+      (c, s, p) <- csps
+      if (bettyFilter(p))
+    } yield {
+      c
+    }
+
+// alice tells (betty and) colin that,
+// from all combination choices there is
+// one combination with unique subtractions
+// more precisely, for all other combination choices
+// there exist consecutive elements such that their
+// subtraction differs from the one of the combination.
+// colin now should know how to find the combination.
+val colin: List[Choices] => List[Choices] =
+  cs =>
+    val colinFilter: Choices => Boolean = 
+      c => uniqueSubtractions(cs)(c)
+    for {
+      c <- cs
+      if (colinFilter(c))
+    } yield {
+      c
+    }
+
+val solution: Tuple2[Int, Int] => List[Choices] = 
+  choicesWithSumsAndProducts andThen alice andThen betty andThen colin
+
+val solutions: Tuple2[Int, Int] => List[Choices] =
+  (n, m) =>
+    (for {
+      l <- 1 to n
+      k <- 1 to m 
+      s = solution(l, k)
+      if (unique(s))
+    } yield {
+      ((l, k), s.head)
+    }).toList.map({ case (_, s) => s })
 
 @main def main() =
 
   import test.test
 
-  test("15 is unique product for choices(6)(2)") {
-    uniqueProducts(choicesWithSumsAndProducts(6)(2)).contains(15)
+  test("solution(6, 2) == List(List(3, 5))") {
+    solution(6, 2) == List(List(3, 5))
   }
 
-  test("26 is unique product for choices(16)(2)") {
-    uniqueProducts(choicesWithSumsAndProducts(16)(2)).contains(26)
+  test("solution(16, 2) == List(List(2, 13))") {
+    solution(16, 2) == List(List(2, 13))
   }
 
-  test("combinations(6)(2) == List(List(3, 5))") {
-    combinations(6)(2) == List(List(3, 5))
+  test("solutions(16, 4) == List(List(3, 5), List(2, 13))") {
+    solutions(16, 4) == List(List(3, 5), List(2, 13))
   }
 
-  test("combinations(16)(2) == List(List(2, 13))") {
-    combinations(16)(2) == List(List(2, 13))
-  }
+  // interactive (16, 5) and others
 
-  test("combinations(10)(3) == List()") {
-    combinations(10)(3) == List()
-  }
+  import scala.io.StdIn.readInt
+
+  println(solutions(readInt, readInt))

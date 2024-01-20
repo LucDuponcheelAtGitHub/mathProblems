@@ -34,11 +34,17 @@ I have implemented a derivation of the property(for the symmetric point).
 
 I also tested the correctness of the derivation and the obtained values.
 
-For the moment only `specialEllipse.main` is involved.
+For the moment only `secretCombination.main` and `specialEllipse.main` are involved.
 
 ```scala
 sbt:mathProblems> run
-[info] running specialEllipse.main
+
+Multiple main classes detected. Select one to run:
+ [1] secretCombination.main
+ [2] specialEllipse.main
+
+Enter number: 2
+[info] running specialEllipse.main 
 deriving angle between focus lines at P is OK
 deriving equation for y at P is OK
 deriving solution for y at P if α == π/3.0 is OK
@@ -47,6 +53,27 @@ deriving angle of tangent at P if α == π/3.0 is OK
 P is on ellipse is OK
 angle between focus lines at P is π/3.0 is OK
 angle of tangent at P is π/4.0 is OK
+[success]
+```
+
+and
+
+
+```scala
+sbt:mathProblems> run
+
+Multiple main classes detected. Select one to run:
+ [1] secretCombination.main
+ [2] specialEllipse.main
+
+Enter number: 1
+[info] running secretCombination.main 
+solution(6, 2) == List(List(3, 5)) is OK
+solution(16, 2) == List(List(2, 13)) is OK
+solutions(16, 4) == List(List(3, 5), List(2, 13)) is OK
+16
+5
+List(List(3, 5), List(2, 13))
 [success]
 ```
 
