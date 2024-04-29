@@ -2,7 +2,12 @@
 -- Matrix Puzzles --
 --------------------
 
-import Data.List ( transpose, (\\), zipWith3 )
+-- import Control.Concurrent
+
+import Data.List ( transpose, (\\), zipWith3, nub, sort, sortBy )
+
+sortWith :: Ord b => (a -> b) -> [a] -> [a]
+sortWith f = sortBy (\x y -> compare (f x) (f y))
 
 -- general definitions
 
@@ -14,6 +19,15 @@ listOfListCombinations :: Eq a => [[a]] -> [[a]]
 listOfListCombinations [] = [[]]
 listOfListCombinations (xs:xss) = 
   [y:ys | y <- xs, ys <- listOfListCombinations (map (filter (/= y)) xss)]
+
+spanByFirst :: Eq a => Int -> [[a]] -> ([[a]], [[a]])
+spanByFirst n xss = span (\xs -> take n xs == ys) xss
+  where ys = take n (head xss)
+
+groupByFirst :: Eq a => Int -> [[a]] -> [[[a]]]
+groupByFirst n [] = []
+groupByFirst n xss = hss : groupByFirst n tss
+ where (hss, tss) = spanByFirst n xss
 
 instance Num (Maybe Integer) where
  negate (Just x) = Just (-x)
@@ -30,6 +44,9 @@ instance Num (Maybe Integer) where
  signum _ = Nothing
  fromInteger = Just
 
+valueOf :: Maybe a -> a
+valueOf (Just x) = x
+
  -- framework declarations
 
 type Choices a = [a]
@@ -39,6 +56,8 @@ type ListOfSuccesses a = [a]
 type Matrix a = [Row a]
 
 type Row a = [a]
+
+type Polygon a = [a]
 
  -- framework definitions
 
@@ -138,7 +157,7 @@ boxesToRows m = (unpack . map columnsToRows . pack) m
         intSqrt = round . sqrt . fromIntegral
     unpack = map concat . concat
     unconcat n [] = []
-    unconcat n xs = [take n xs] ++ unconcat n (drop n xs)
+    unconcat n xs = take n xs : unconcat n (drop n xs)
     concat [] = []
     concat (xs:xss) = xs ++ concat xss
 
@@ -157,7 +176,7 @@ sudokuMatrixOfChoicesPrune =
   where
     rowsOfChoicesPrune f = f . rowMap rowOfChoicesPrune . f
 
-sudokuChoices :: Choices (Char)
+sudokuChoices :: Choices Char
 sudokuChoices = ['1' .. '9']
 
 sudokuHasNoValue :: Char -> Bool
@@ -177,7 +196,7 @@ polygonMatrixOfChoicesFails :: (Eq a, Num a) => Matrix (Choices a) -> Bool
 polygonMatrixOfChoicesFails m =
   matrixAny isEmpty m ||
   (rowHasDuplicates . matrixSingles) m ||
-  rowAny (not . (elem productOfFirstRow)) productsOfOtherRowsOfChoices
+  rowAny (notElem productOfFirstRow) productsOfOtherRowsOfChoices
     where
       productsOfRowsOfChoices = map (map product) choicesRows
       choicesRows = map listOfListProduct rowsOfChoices
@@ -189,14 +208,14 @@ polygonMatrixOfChoicesPrune :: Eq a => Matrix (Choices a) -> Matrix (Choices a)
 polygonMatrixOfChoicesPrune = rowMap rowOfChoicesPrune
 
 polygonChoices :: Choices (Maybe Integer)
-polygonChoices = map Just [1 .. 12]
+polygonChoices = map Just [1 .. 24]
 
 polygonHasNoValue :: Maybe Integer -> Bool
 polygonHasNoValue = (== Nothing)
 
 polygonSolutions :: Matrix (Maybe Integer) -> ListOfSuccesses (Matrix (Maybe Integer))
 polygonSolutions =
-  matrixOfChoicesToListOfSolutions polygonMatrixOfChoicesFails polygonMatrixOfChoicesPrune .
+  matrixOfChoicesToListOfSolutions polygonMatrixOfChoicesFails polygonMatrixOfChoicesPrune.
   matrixToMatrixOfChoices polygonChoices polygonHasNoValue
 
 -- sudoku example
@@ -218,44 +237,47 @@ allSudokuSolutions = sudokuSolutions sudokuExample
 sudokuMain :: IO ()
 sudokuMain =
  do
-    putStrLn (unlines (sudokuExample))
+    putStrLn (unlines sudokuExample)
     putStrLn (unlines (head allSudokuSolutions))
 
 -- polygon example(s)
 
-polygonExamples :: Int -> Int -> Choices (Maybe Integer) -> [Matrix (Maybe Integer)]
-polygonExamples ps ss cs =
+polygonExamplesFor :: Int -> Int -> Choices (Maybe Integer) -> [Matrix (Maybe Integer)]
+polygonExamplesFor polygonSize sideSize polygonChoices =
   zipWith3
    (\xs ys zss -> xs : ys : zss)
    (map init combinations)
    (map second combinations)
    (replicate (length combinations) others)
   where
-    combinations = listOfListCombinations (replicate ss cs)
-    second = (\x -> [x] ++ (replicate (ss - 2) Nothing)) . last
-    others = replicate (ps - 2) (replicate (ss - 1) Nothing)
+    combinations = listOfListCombinations (replicate sideSize polygonChoices)
+    second = (\x -> x : replicate (sideSize - 2) Nothing) . last
+    others = replicate (polygonSize - 2) (replicate (sideSize - 1) Nothing)
 
 polygonSize :: Int
-polygonSize = 3
+polygonSize = 7
 
 sideSize :: Int
 sideSize = 3
 
-polygonExample :: [Matrix (Maybe Integer)]
-polygonExample = polygonExamples polygonSize sideSize polygonChoices
+polygonExamples :: [Matrix (Maybe Integer)]
+polygonExamples = polygonExamplesFor polygonSize sideSize polygonChoices
 
-allPolygonSolutions :: ListOfSuccesses (Matrix (Maybe Integer))
-allPolygonSolutions = concat (map polygonSolutions polygonExample)
+polygonExamplesSolutions :: ListOfSuccesses (Polygon Integer)
+polygonExamplesSolutions = matrixMap valueOf (map concat (concatMap polygonSolutions polygonExamples))
+
+polygonExamplesUniqueSolutions :: ListOfSuccesses (Polygon Integer)
+polygonExamplesUniqueSolutions = map head (filter isSingle (groupByFirst sideSize polygonExamplesSolutions))
 
 polygonMain :: IO ()
 polygonMain =
   do
-    putStr "polygon with 3 vertices with sides of 3 values in [1..12] has "
-    putStr (show (length (allPolygonSolutions)))
-    putStrLn " solutions"
-    putStrLn "where the first 10 solutons are "
-    putStrLn (unlines (map show (take 10 allPolygonSolutions)))
-
+    -- putStr "polygon puzzle with 3 vertices with sides of 3 values in [1..9] has "
+    -- putStr (show (length polygonExamplesUniqueSolutions))
+    -- putStrLn " unique solutions"
+    -- putStrLn (unlines (map show polygonExamplesUniqueSolutions))
+    -- putStrLn (unlines (map show (polygonSolutions [[Just 4, Just 10],[Just 18, Nothing],[Nothing, Nothing],[Nothing, Nothing],[Nothing, Nothing],[Nothing, Nothing],[Nothing, Nothing]])))
+    putStrLn (unlines (map show (polygonSolutions [[Just 9,Just 16],[Just 5,Nothing], [Nothing,Nothing],[Nothing,Nothing],[Nothing,Nothing], [Nothing,Nothing],[Nothing, Nothing]])))
 -- main(s)
 
 main :: IO ()

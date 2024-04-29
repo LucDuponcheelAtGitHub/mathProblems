@@ -2,33 +2,18 @@ package specialEllipse
 
 import scala.math.*
 
-//
-// see README.md for more information
-// about the property of the special ellipse
-//
-// the numbers 1.0, 2.0, 3.0, and 4.0
-// play a special role in the property
-// and its derivation
-//
-// for example in
-// sqrt(1.0 + 3.0) = sqrt(4.0) = 2.0
-//
-// and also in
-// π/(2.0*2.0) resp. π/(2.0*3.0) (π/4.0 resp. π/6)
-//
-
 // the general equation of an ellipse
 // with major axis a and minor axis b
 // is x*x/a*a + y*y/b*b = 1
 //
-// for the special ellipse we have 1 = a < b = 1/sqrt(2) (cfr A4 paper) and
-// therefore equation of the special ellipse is x*x + 2*y*y = 1
+// for the special ellipse we use a = 1 and b = 1/sqrt(2) (cfr A4 paper)
+// and therefore the equation of the special ellipse is x*x + 2*y*y = 1
 
 val π: Double = Pi
 
 type Point = Tuple2[Double, Double]
 
-val derivingAngleBetweenFocusLinesAt: Point => List[Double] =
+val derivingTangensOfAngleBetweenFocusLinesAt: Point => List[Double] =
 
   val slopeOfLeftFocusLinesAt: Point => Double = (x, y) => y / (x + 1.0 / sqrt(2.0))
 
@@ -37,52 +22,49 @@ val derivingAngleBetweenFocusLinesAt: Point => List[Double] =
   val angleBetweenFocusLinesAt: Point => Double = (x, y) =>
     atan(slopeOfLeftFocusLinesAt(x, y)) - atan(slopeOfRightFocusLinesAt(x, y))
 
-  // tan(α - β) = (tan(α) - tan(β))/(1.0 + tan(α) * tan(β))
   (x, y) =>
     List(
-      angleBetweenFocusLinesAt(x, y),
-      // = ...
-      atan(tan(angleBetweenFocusLinesAt(x, y))),
-      atan(tan(atan(slopeOfLeftFocusLinesAt(x, y)) - atan(slopeOfRightFocusLinesAt(x, y)))),
-      atan(tan(atan(y / (x + 1.0 / sqrt(2.0))) - atan(y / (x - 1.0 / sqrt(2.0))))),
-      atan(
-        (tan(atan(y / (x + 1.0 / sqrt(2.0)))) - tan(atan(y / (x - 1.0 / sqrt(2.0))))) /
-          (1.0 + tan(atan(y / (x - 1.0 / sqrt(2.0)))) * tan(atan(y / (x + 1.0 / sqrt(2.0)))))
-      ),
-      atan(
-        ((y / (x + 1.0 / sqrt(2.0))) - (y / (x - 1.0 / sqrt(2.0)))) /
-          (1.0 + (y / (x - 1.0 / sqrt(2.0))) * (y / (x + 1.0 / sqrt(2.0))))
-      ),
-      atan(
-        (((-y * x - y / sqrt(2.0) + y * x - y / sqrt(
-          2.0
-        ))) / (x * x - 1.0 / 2.0)) / (1.0 + (y * y / (x * x - 1.0 / 2.0)))
-      ),
-      atan(
-        (((-y * x - y / sqrt(2.0) + y * x - y / sqrt(
-          2.0
-        ))) / (x * x - 1.0 / 2.0)) / ((x * x - 1.0 / 2.0 + y * y) / (x * x - 1.0 / 2.0))
-      ),
-      atan(((-y * x - y / sqrt(2.0) + y * x - y / sqrt(2.0))) / (x * x - 1.0 / 2.0 + y * y)),
-      atan((-y / sqrt(2.0) - y / sqrt(2.0)) / (x * x - 1.0 / 2.0 + y * y)),
-      atan((-y / sqrt(2.0) - y / sqrt(2.0)) / (1.0 - 2.0 * y * y - 1.0 / 2.0 + y * y)),
-      atan((-y / sqrt(2.0) - y / sqrt(2.0)) / (1.0 / 2.0 - y * y)),
-      // // ...
-      atan((-2.0 * y / sqrt(2.0)) / (1.0 / 2.0 - y * y))
+      tan(angleBetweenFocusLinesAt(x, y)),
+      tan(atan(slopeOfLeftFocusLinesAt(x, y)) - atan(slopeOfRightFocusLinesAt(x, y))),
+      tan(atan(y / (x + 1.0 / sqrt(2.0))) - atan(y / (x - 1.0 / sqrt(2.0)))),
+      // tan(α - β) = (tan(α) - tan(β))/(1.0 + tan(α) * tan(β))
+      (tan(atan(y / (x + 1.0 / sqrt(2.0)))) - tan(
+        atan(y / (x - 1.0 / sqrt(2.0)))
+      )) / (1.0 + tan(atan(y / (x - 1.0 / sqrt(2.0)))) * tan(
+        atan(y / (x + 1.0 / sqrt(2.0)))
+      )),
+      ((y / (x + 1.0 / sqrt(2.0))) - (y / (x - 1.0 / sqrt(
+        2.0
+      )))) / (1.0 + (y / (x - 1.0 / sqrt(2.0))) * (y / (x + 1.0 / sqrt(2.0)))),
+      (((-y * x - y / sqrt(2.0) + y * x - y / sqrt(
+        2.0
+      ))) / (x * x - 1.0 / 2.0)) / (1.0 + (y * y / (x * x - 1.0 / 2.0))),
+      (((-y * x - y / sqrt(2.0) + y * x - y / sqrt(
+        2.0
+      ))) / (x * x - 1.0 / 2.0)) / ((x * x - 1.0 / 2.0 + y * y) / (x * x - 1.0 / 2.0)),
+      ((-y * x - y / sqrt(2.0) + y * x - y / sqrt(2.0))) / (x * x - 1.0 / 2.0 + y * y),
+      (-y / sqrt(2.0) - y / sqrt(2.0)) / (x * x - 1.0 / 2.0 + y * y),
+      (-y / sqrt(2.0) - y / sqrt(2.0)) / (1.0 - 2.0 * y * y - 1.0 / 2.0 + y * y),
+      (-y / sqrt(2.0) - y / sqrt(2.0)) / (1.0 / 2.0 - y * y),
+      (-2.0 * y / sqrt(2.0)) / (1.0 / 2.0 - y * y)
     )
 
-// for tan(π/3.0) = sqrt(3.0)
-// using slope equal to (-2.0 * y/sqrt(2.0))/(1.0/2.0 - y*y)
-// and (for convenience) multplying by sqrt(2.0)
+// if angleBetweenFocusLinesAt(x, y) = π/3.0
+// then tan(angleBetweenFocusLinesAt(x, y)) = tan(π/3.0) = sqrt(3.0)
+
 val derivingEquationForYAt: Point => List[Double] =
   (x, y) =>
     List(
+      sqrt(2.0) * (sqrt(3.0) - ((-2.0 * y / sqrt(2.0)) / (1.0 / 2.0 - y * y))),
+      sqrt(2.0) * (sqrt(3.0) * (1.0 / 2.0 - y * y) - (-2.0 * y / sqrt(2.0))),
       sqrt(2.0) * (sqrt(3.0) * (1.0 / 2.0 - y * y) + (2.0 * y / sqrt(2.0))),
       -sqrt(2.0) * sqrt(3.0) * y * y + 2.0 * y + sqrt(3.0) / sqrt(2.0),
       -sqrt(2.0 * 3.0) * y * y + 2.0 * y + sqrt(2.0 * 3.0) / 2.0
     )
 
-//  (-b + sqrt(b*b - a*c))/a
+// solution of a*y*y + 2*b*y + c = 0 is
+// y = -b + sqrt(b*b - a*c))/a
+
 val derivingSolutionForY: List[Double] = List(
   (-1.0 + sqrt(1.0 + 3.0)) / -sqrt(2.0 * 3.0),
   (1.0 - sqrt(1.0 + 3.0)) / sqrt(2.0 * 3.0),
@@ -92,6 +74,7 @@ val derivingSolutionForY: List[Double] = List(
 )
 
 // x = sqrt(1.0 - 2.0*y*y)
+
 val derivingSolutionForX: List[Double] = List(
   sqrt(1.0 - 2.0 * (-1.0 / sqrt(2.0 * 3.0)) * (-1.0 / sqrt(2.0 * 3.0))),
   sqrt(1.0 - 2.0 * (1.0 / sqrt(2.0 * 3.0)) * (1.0 / sqrt(2.0 * 3.0))),
@@ -104,6 +87,7 @@ val derivingSolutionForX: List[Double] = List(
 // the slope of the tangent at P is -sin(γ) / (cos(γ)/sqrt(2.0))
 // in other words, without using γ,
 // the slope of the tangent at P is -(y*sqrt(2.0)) / (x/sqrt(2.0))
+
 val derivingAngleOfTangent: List[Double] = List(
   atan((1.0 / sqrt(2.0 * 3.0) * sqrt(2.0)) / ((sqrt(2.0 / 3.0)) / sqrt(2.0))),
   atan((1.0 / (sqrt(3.0))) / (1.0 / sqrt(3.0))),
@@ -131,10 +115,20 @@ val derivingAngleOfTangent: List[Double] = List(
 
   val P: Point = (x, y)
 
-  import test.test
+  import scala.io.AnsiColor.*
+
+  val test: String => Boolean => Unit =
+    message =>
+      booleanResult =>
+        print(s"$message")
+        if (booleanResult) {
+          println(s" is ${GREEN}OK${RESET}")
+        } else {
+          println(s" is ${RED}KO${RESET}")
+        }
 
   test("deriving angle between focus lines at P") {
-    allEqual(derivingAngleBetweenFocusLinesAt(P))
+    allEqual(derivingTangensOfAngleBetweenFocusLinesAt(P))
   }
 
   test("deriving equation for y at P") {
@@ -159,7 +153,7 @@ val derivingAngleOfTangent: List[Double] = List(
     v ~ 1.0
   }
 
-  val α: Double = derivingAngleBetweenFocusLinesAt(P).last
+  val α: Double = atan(derivingTangensOfAngleBetweenFocusLinesAt(P).last)
 
   test("angle between focus lines at P is π/3.0") {
     α ~ (π / 3.0)
