@@ -2,8 +2,6 @@ module MatrixPuzzles where
 
 import Data.List ( (\\) )
 
--- import MatrixPuzzlesUtilities ( listOfListProduct )
-
 type Choices a = [a]
 
 type ListOfSuccesses a = [a]
@@ -88,16 +86,18 @@ matrixOfChoicesToListOfSolutions
      Matrix (Choices a) -> ListOfSuccesses (Matrix a)
 matrixOfChoicesToListOfSolutions
  matrixOfChoicesFails
- matrixOfChoicesPrune =
-  prunedMatrixOfChoicesToListOfSolutions . matrixOfChoicesPrune
+ pruneMatrixOfChoices =
+  prunedMatrixOfChoicesToListOfSolutions . pruneMatrixOfChoices
   where
+   prunedMatrixOfChoicesToListOfSolutions :: Matrix (Choices a) -> ListOfSuccesses (Matrix a)
    prunedMatrixOfChoicesToListOfSolutions m
      | matrixOfChoicesFails m = []
      | matrixAny isNotSingleChoice m = matrixOfChoicesToListOfSolutionsStep m
      | otherwise = matrixOfChoicesToListOfSuccessfulMatrices m
+   matrixOfChoicesToListOfSolutionsStep:: Matrix (Choices a) -> ListOfSuccesses (Matrix a) 
    matrixOfChoicesToListOfSolutionsStep m =
     [m | 
      csm <- matrixOfChoicesToListOfSuccessfulMatricesStep m,
      m <- matrixOfChoicesToListOfSolutions
             matrixOfChoicesFails
-            matrixOfChoicesPrune csm]
+            pruneMatrixOfChoices csm]

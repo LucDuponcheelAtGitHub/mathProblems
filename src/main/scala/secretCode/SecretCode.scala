@@ -2,11 +2,11 @@ package secretCode
 
 import scala.collection.immutable.Seq
 
-// generic
+// generic def's
 
-def unique[Z]: Seq[Z] => Boolean =
+def isUnique[Z]: Seq[Z] => Boolean =
   case Seq(_) => true
-  case _       => false
+  case _      => false
 
 def euclideanNorm[Z: Numeric]: Seq[Z] => Z =
   val numeric = summon[Numeric[Z]]
@@ -40,7 +40,7 @@ def isMostIncreasingAmong[Z: Numeric: Ordering]: Seq[Seq[Z]] => Seq[Z] => Boolea
   import ordering.gt
   cs => c => cs.forall(c2 => c2 == c || gt(increase apply c, increase apply c2))
 
-// specific
+// specific type's
 
 type C = Seq[Int] // Code
 
@@ -48,10 +48,20 @@ type M = Int // Max
 
 type L = Int // Length
 
-type ML = ((M, L))
+type ML = ((M, L)) // Max and Length
+
+type S = Int // Sum
+
+type P = Int // Product
+
+type SP = ((S, P)) // Sum and Product
+
+type CSP = (C, S, P) // Code, Sum and Product
+
+// specific val's
 
 val nonConsecutiveStrictlyIncreasingCodes: ML => Seq[C] =
-  case (m, l) =>
+  (m, l) =>
     l match {
       case 0 => Seq(Seq())
       case _ =>
@@ -64,13 +74,32 @@ val nonConsecutiveStrictlyIncreasingCodes: ML => Seq[C] =
         }).toSeq
     }
 
-type S = Int // Sum
+val nonConsecutiveStrictlyIncreasingCodesWithSumAndProduct: ML => Seq[CSP] =
+  (m, l) =>
+    for {
+      c <- nonConsecutiveStrictlyIncreasingCodes(m, l)
+      s = c.sum
+      p = c.product
+    } yield {
+      (c, s, p)
+    }
 
-type P = Int // Product
-
-type SP = ((S, P))
-
-type CSP = (C, S, P)
+val isUniquelyDefinedBySumAndProductFilter: Seq[CSP] => Seq[CSP] =
+  csps =>
+    val sumAndProductIsUnique: (S, P) => Boolean =
+      (s, p) =>
+        isUnique(for {
+          (_, s2, p2) <- csps
+          if (s == s2 && p == p2)
+        } yield {
+          ()
+        })
+    for {
+      csp @ (_, s, p) <- csps
+      if (sumAndProductIsUnique(s, p))
+    } yield {
+      csp
+    }
 
 val productsForSumIn: Seq[CSP] => S => Seq[P] =
   csps =>
@@ -86,43 +115,47 @@ val sumsForProductIn: Seq[CSP] => P => Seq[S] =
   csps =>
     p1 =>
       for {
-        (cs, l, p2) <- csps
+        (cs, s, p2) <- csps
         if p1 == p2
       } yield {
-        l
+        s
       }
 
 val sumsForProductsFromSumIn: Seq[CSP] => S => Seq[Seq[S]] =
   csps =>
-    l =>
+    s =>
       for {
-        p <- productsForSumIn(csps)(l)
+        p <- productsForSumIn(csps)(s)
       } yield {
         sumsForProductIn(csps)(p)
       }
 
-val alice: Seq[CSP] => Seq[CSP] =
+val ximena: ML => Seq[CSP] =
+  nonConsecutiveStrictlyIncreasingCodesWithSumAndProduct andThen
+    isUniquelyDefinedBySumAndProductFilter
+      
+val alice2ximena: Seq[CSP] => Seq[CSP] =
   csps =>
     for {
-      csp @ (_, l, _) <- csps
-      if (!sumsForProductsFromSumIn(csps)(l).forall(unique))
+      csp @ (_, s, _) <- csps
+      if (!sumsForProductsFromSumIn(csps)(s).forall(isUnique))
     } yield {
       csp
     }
 
-val bob: Seq[CSP] => Seq[CSP] =
+val bob2ximena: Seq[CSP] => Seq[CSP] =
   csps =>
     for {
       csp @ (_, _, p) <- csps
-      if (unique(sumsForProductIn(csps)(p)))
+      if (isUnique(sumsForProductIn(csps)(p)))
     } yield {
       csp
     }
 
-val you: Seq[CSP] => Seq[CSP] =
+val alice2you: Seq[CSP] => Seq[CSP] =
   csps =>
     for {
-      csp @ (c, l, p) <- csps
+      csp @ (c, _, _) <- csps
       cs = for { (c, _, _) <- csps } yield { c }
       // if ((isLeastIncreasingAmong apply cs)(c))
       if ((isMostIncreasingAmong apply cs)(c))
@@ -130,35 +163,8 @@ val you: Seq[CSP] => Seq[CSP] =
       csp
     }
 
-lazy val nonConsecutiveStrictlyIncreasingCodesWithSumAndProduct: ML => Seq[CSP] =
-  (m, l) =>
-    for {
-      c <- nonConsecutiveStrictlyIncreasingCodes(m, l)
-      l = c.sum
-      p = c.product
-    } yield {
-      (c, l, p)
-    }
-
-lazy val uniquelyDefinedBySumAndProduct: Seq[CSP] => Seq[CSP] =
-  csps =>
-    for {
-      csp @ (_, l, p) <- csps
-      if (unique(for {
-        (_, s2, p2) <- csps
-        if (l == s2 && p == p2)
-      } yield {
-        ()
-      }))
-    } yield {
-      csp
-    }
-
-val ximena =
-  nonConsecutiveStrictlyIncreasingCodesWithSumAndProduct andThen
-    uniquelyDefinedBySumAndProduct
-
-val solution: ML => Seq[CSP] = ximena andThen alice andThen bob andThen you
+val solution: ML => Seq[CSP] =
+  ximena andThen alice2ximena andThen bob2ximena andThen alice2you
 
 val solutionsUpTo: ML => Seq[Seq[((M, L), CSP)]] =
   (maxM, maxL) =>
@@ -166,7 +172,7 @@ val solutionsUpTo: ML => Seq[Seq[((M, L), CSP)]] =
       m <- 1 to maxM
       l <- 1 to maxL
       csps = solution(m, l)
-      if (unique(csps))
+      if (!csps.isEmpty)
       csp = csps.head
     } yield {
       ((m, l), csp)
@@ -174,7 +180,12 @@ val solutionsUpTo: ML => Seq[Seq[((M, L), CSP)]] =
 
 @main def main() =
   import scala.io.StdIn.readInt
-  println(solutionsUpTo(
-    { print("please type a max maximum: ") ; readInt()}, 
-    { print("please type a max length: ") ; readInt()}, 
-    ))
+  val maxM = { print("please type a max maximum: "); readInt() }
+  val maxL = { print("please type a max length: "); readInt() }
+  println(solutionsUpTo(maxM, maxM))
+  // val m = { print("please type a maximum: ") ; readInt() } // 15
+  // val l = { print("please type a length: ") ; readInt() } // 3
+  // val seqA = nonConsecutiveStrictlyIncreasingCodesWithSumAndProduct(m, l)
+  // val seqB = ximena(m, l)
+  // val seqC = seqA.filter(a => !seqB.contains(a))
+  // println(seqC)

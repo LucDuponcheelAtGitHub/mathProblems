@@ -43,14 +43,14 @@ Alice resp. Bob knows that Bob resp. Alice knows the product resp. sum.
 Knowing the sum, Alice, a clever women, tells Ximena that she cannot deduce that Bob can deduce the sum.
 Knowing the product, Bob, a clever man, tells Ximena that he can deduce the sum.
 Ximana tells you the story above and also tells you that the numbers are
-case (1) : the unique least increasing ones
+case (1) : the unique least increasing ones,
 case (2) : the unique most increasing ones
 among the ones that you, as a clever person, can deduce so far.
 
 The increase of numbers is defined by the square of the Euclidean norm of successive
 differences, for example, the increase of 1, 3, 5 is 2 * 2 + 2 * 2 = 4 + 4 = 8.
 
-*Which secret nonConsecutiveStrictlyIncreasingCodes can Ximena have for case (1) or case (2) for combination locks*
+*Which secret codes can Ximena have for case (1) or case (2) for a combination lock*
 *with a max length of `9` integers between `1` and a max maximum of `9`?*
 
 *Answer:* 
@@ -67,6 +67,3 @@ notation `(((maximum,length),(secret code,sum,product)))`
   - `(((8,3),((1, 3, 7),11,21)))`
   - `(((9,2),((1, 9),10,9)))`
   - `(((9,3),((1, 5, 9),15,45)))`
-
-
-
