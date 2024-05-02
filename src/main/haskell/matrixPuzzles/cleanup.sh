@@ -2,7 +2,7 @@
 
 rm *.o
 rm *.hi
-rm sudokuExampleMain
-rm polygonExamplesMain
-rm polygonGameExamplesMain
+rm sudokuPuzzleMain
+rm polygonPuzzlesMain
+rm polygonPuzzlesGeneratorMain
 

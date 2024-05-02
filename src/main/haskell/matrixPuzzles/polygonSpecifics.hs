@@ -1,7 +1,5 @@
 module PolygonSpecifics where
 
-import Utilities ( unconcat )
-
 import MatrixPuzzles
   ( Choices,
     ListOfSuccesses,
@@ -9,7 +7,6 @@ import MatrixPuzzles
     Row,
     isNoChoice,
     matrixAny,
-    matrixMap,
     matrixOfChoicesToListOfSolutions,
     matrixToMatrixOfChoices,
     rowAny,
@@ -19,9 +16,7 @@ import MatrixPuzzles
     rowOfChoicesToListOfSuccessfulRows,
     rowSingleChoices,
   )
-
-matrixSingleChoices :: Matrix (Choices a) -> Row a
-matrixSingleChoices = rowSingleChoices . concat
+import Utilities (unconcat)
 
 instance Num (Maybe Integer) where
   negate (Just x) = Just (-x)
@@ -41,7 +36,7 @@ instance Num (Maybe Integer) where
 polygonMatrixOfChoicesFails :: (Eq a, Num a) => Matrix (Choices a) -> Bool
 polygonMatrixOfChoicesFails m =
   matrixAny isNoChoice m
-    || (rowHasDuplicates . matrixSingleChoices) m
+    || (rowHasDuplicates . rowSingleChoices . concat) m
     || rowAny (notElem productOfFirstRow) productsOfOtherRowsOfChoices
   where
     productsOfRowsOfChoices = map (map product) choicesRows
@@ -50,7 +45,7 @@ polygonMatrixOfChoicesFails m =
     productOfFirstRow = head (head productsOfRowsOfChoices)
     productsOfOtherRowsOfChoices = tail productsOfRowsOfChoices
 
-polygonMatrixOfChoicesPrune :: (Eq a) => Matrix (Choices a) -> Matrix (Choices a)
+polygonMatrixOfChoicesPrune :: Eq a => Matrix (Choices a) -> Matrix (Choices a)
 polygonMatrixOfChoicesPrune = rowMap rowOfChoicesPrune
 
 polygonChoices :: Choices (Maybe Integer)
@@ -59,7 +54,11 @@ polygonChoices = map Just [1 .. 20]
 polygonNoChoice :: Maybe Integer -> Bool
 polygonNoChoice = (== Nothing)
 
-polygonSolutions :: Matrix (Maybe Integer) -> ListOfSuccesses (Matrix (Maybe Integer))
+type PolygonPuzzle = Matrix (Maybe Integer)
+
+type PolygonSolution = Matrix (Maybe Integer)
+
+polygonSolutions :: PolygonPuzzle -> ListOfSuccesses PolygonSolution
 polygonSolutions =
   matrixOfChoicesToListOfSolutions polygonMatrixOfChoicesFails polygonMatrixOfChoicesPrune
     . matrixToMatrixOfChoices polygonChoices polygonNoChoice

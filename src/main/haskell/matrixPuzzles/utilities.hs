@@ -1,11 +1,17 @@
 module Utilities where
 
--- TODO: maybe also listOfListProduct
+isUnique :: [a] -> Bool
+isUnique [_] = True
+isUnique cs = False
 
-listOfListCombinations :: Eq a => [[a]] -> [[a]]
-listOfListCombinations [] = [[]]
-listOfListCombinations (xs:xss) = 
-  [y:ys | y <- xs, ys <- listOfListCombinations [ [ x | x <- xs, x /= y ] | xs <- xss ] ]
+listOfListsProduct :: [[a]] -> [[a]]
+listOfListsProduct [] = [[]]
+listOfListsProduct  (xs:xss) = [y:ys | y <- xs, ys <- listOfListsProduct xss]
+
+listOfListsCombinations :: Eq a => [[a]] -> [[a]]
+listOfListsCombinations [] = [[]]
+listOfListsCombinations (xs:xss) = 
+  [y:ys | y <- xs, ys <- listOfListsCombinations [ [ x | x <- xs, x /= y ] | xs <- xss ] ]
 
 unconcat :: Int -> [a] -> [[a]]
 unconcat n [] = []
