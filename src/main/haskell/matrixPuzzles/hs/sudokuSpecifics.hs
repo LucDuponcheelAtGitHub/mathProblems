@@ -5,7 +5,7 @@ import MatrixPuzzles (MatrixPuzzleSolver, solver)
 import Utilities (chop, reduce, noDupSinglesIn)
 
 sudokuSolver :: MatrixPuzzleSolver Char
-sudokuSolver zss = solver noDupSingles pruneNonSingles fail values zss
+sudokuSolver zss = solver noDuplicateSingles pruneNonSingles fail values zss
   where
 
     values = map (Just . head . show) [1 .. toInteger sudokuSize]
@@ -32,7 +32,7 @@ sudokuSolver zss = solver noDupSingles pruneNonSingles fail values zss
 
     intSqrt = round . sqrt . fromIntegral
 
-    noDupSingles cm =
+    noDuplicateSingles cm =
       all noDupSinglesIn (rows cm)
         && all noDupSinglesIn (cols cm)
         && all noDupSinglesIn (boxs cm)

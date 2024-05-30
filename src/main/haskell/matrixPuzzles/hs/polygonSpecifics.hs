@@ -4,7 +4,7 @@ import MatrixPuzzles (MatrixPuzzleSolver, solver)
 import Utilities (cp, reduce, noDupSinglesIn)
 
 polygonSolver :: Integer -> MatrixPuzzleSolver Integer
-polygonSolver polygonMaxNumber = solver noDupSingles pruneNonSingles fail values
+polygonSolver polygonMaxNumber = solver noDuplicateSingles pruneNonSingles fail values
   where
 
     values = map Just [1 .. polygonMaxNumber]
@@ -26,6 +26,6 @@ polygonSolver polygonMaxNumber = solver noDupSingles pruneNonSingles fail values
 
     pruneNonSingles = map reduce
 
-    noDupSingles = noDupSinglesIn . pol
+    noDuplicateSingles = noDupSinglesIn . pol
 
     pol = concat
