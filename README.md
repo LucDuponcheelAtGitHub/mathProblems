@@ -83,29 +83,37 @@ Complete the triangle below with unique natural numbers between 1 and 8
 for the placeholders '?'
 such that the products of all sides of the triangle are equal.
 
+```
           8
       ?       ?
   2       ?       6
+```
 
 Below are two ways to represent the triangle above as a matrix
 
-1) as a matrix of sides
+- as a matrix of sides
 
+```
 8 ? 2
 2 ? 6
 6 ? 8
+```
 
-2) as a matrix of initial parts of sides ()
+- as a matrix of initial parts of sides
 
+```
 8 ?
 2 ?
 6 ?
+```
 
 The solution of the puzzle is
 
+```
           8
       3       1
   2       4       6
+```
 
 The puzzle above is a specific 3, 3, 8 instance of a generic z, y, z puzzle, where
 z is the amount of vertices of a polygon,
