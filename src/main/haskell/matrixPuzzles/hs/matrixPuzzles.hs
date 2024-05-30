@@ -21,7 +21,7 @@ solver ::
   (Matrix (Choices (Maybe z)) -> Matrix (Choices (Maybe z))) ->
   (Matrix (Choices (Maybe z)) -> Bool) ->
   (Choices (Maybe z) -> MatrixPuzzleSolver z)
-solver safe prune fail values = pruneAndThenSearch . choices
+solver noDupSingles pruneNonSingles fail values = pruneAndThenSearch . choices
   where
     choices = map (map choice)
 
@@ -29,14 +29,14 @@ solver safe prune fail values = pruneAndThenSearch . choices
 
     empty = (== Nothing)
 
-    pruneAndThenSearch = search . prune
+    pruneAndThenSearch = search . pruneNonSingles
 
     search mcmz
       | blocked mcmz || fail mcmz = []
       | complete mcmz = collapse mcmz
       | otherwise = [mcmz'' | mcmz' <- expand mcmz, mcmz'' <- pruneAndThenSearch mcmz']
 
-    blocked mcmz = void mcmz || not (safe mcmz)
+    blocked mcmz = void mcmz || not (noDupSingles mcmz)
     
     void = any (any null)
 

@@ -23,8 +23,8 @@ single _ = False
 minus :: (Eq z) => [z] -> [z] -> [z]
 zs `minus` ys = if single zs then zs else zs \\ ys
 
-consistent :: (Eq z) => [[z]] -> Bool
-consistent = nodups . concat . filter single
+noDupSinglesIn :: (Eq z) => [[z]] -> Bool
+noDupSinglesIn = nodups . concat . filter single
   where
     nodups [] = True
     nodups (z : zs) = not (z `elem` zs) && nodups zs

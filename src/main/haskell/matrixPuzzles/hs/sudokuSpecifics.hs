@@ -2,10 +2,10 @@ module SudokuSpecifics where
 
 import Data.List (transpose)
 import MatrixPuzzles (MatrixPuzzleSolver, solver)
-import Utilities (chop, reduce, consistent)
+import Utilities (chop, reduce, noDupSinglesIn)
 
 sudokuSolver :: MatrixPuzzleSolver Char
-sudokuSolver zss = solver safe prune fail values zss
+sudokuSolver zss = solver noDupSingles pruneNonSingles fail values zss
   where
 
     values = map (Just . head . show) [1 .. toInteger sudokuSize]
@@ -14,9 +14,9 @@ sudokuSolver zss = solver safe prune fail values zss
 
     fail zsss = False
 
-    prune = pruneBy boxs . pruneBy cols . pruneBy rows
+    pruneNonSingles = pruneNonSinglesOf boxs . pruneNonSinglesOf cols . pruneNonSinglesOf rows
       where
-        pruneBy f = f . map reduce . f
+        pruneNonSinglesOf f = f . map reduce . f
 
     rows = id
 
@@ -32,8 +32,8 @@ sudokuSolver zss = solver safe prune fail values zss
 
     intSqrt = round . sqrt . fromIntegral
 
-    safe cm =
-      all consistent (rows cm)
-        && all consistent (cols cm)
-        && all consistent (boxs cm)
+    noDupSingles cm =
+      all noDupSinglesIn (rows cm)
+        && all noDupSinglesIn (cols cm)
+        && all noDupSinglesIn (boxs cm)
 

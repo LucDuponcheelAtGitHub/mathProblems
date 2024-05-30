@@ -1,10 +1,10 @@
 module PolygonSpecifics where
 
 import MatrixPuzzles (MatrixPuzzleSolver, solver)
-import Utilities (cp, reduce, consistent)
+import Utilities (cp, reduce, noDupSinglesIn)
 
 polygonSolver :: Integer -> MatrixPuzzleSolver Integer
-polygonSolver polygonMaxNumber = solver safe prune fail values
+polygonSolver polygonMaxNumber = solver noDupSingles pruneNonSingles fail values
   where
 
     values = map Just [1 .. polygonMaxNumber]
@@ -24,8 +24,8 @@ polygonSolver polygonMaxNumber = solver safe prune fail values
             zsss
             (map head (tail zsss) ++ [head (head zsss)])
 
-    prune = map reduce
+    pruneNonSingles = map reduce
 
-    safe = consistent . pol
+    noDupSingles = noDupSinglesIn . pol
 
     pol = concat
