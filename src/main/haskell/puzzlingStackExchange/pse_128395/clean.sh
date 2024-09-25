@@ -2,5 +2,5 @@
 
 rm *.o
 rm *.hi
-rm puzzle128395
+rm main
 
