@@ -127,9 +127,32 @@ The code is based upon https://www.cs.nott.ac.uk/~pszvc/g52afp/sudoku.lhs,
 My twin brother published this puzzle on
 [PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128395/alice-splits-the-bill-not-too-generously-with-bob).
 
-I found it challenging use `forever` to build a lazy infinite *puzzle triangle* similar to the well known *pascal triangle*.
+I found it challenging use to `forever` (in fact just the standard `iterate` bu I added it for clarity) to build a
+lazy infinite *puzzle triangle* similar to the well known *pascal triangle*.
 
-for example
+for example, similar to the pascal triangle
+
+```haskell
+0
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+```
+
+or, annotated with coordinates,
+
+```haskell
+((0,0),0)
+((1,0),1) ((0,1),1)
+((2,0),1) ((1,1),2) ((0,2),1)
+((3,0),1) ((2,1),3) ((1,2),3) ((0,3),1)
+((4,0),1) ((3,1),4) ((2,2),6) ((1,3),4) ((0,4),1)
+((5,0),1) ((4,1),5) ((3,2),10) ((2,3),10) ((1,4),5) ((0,5),1)
+```
+
+the annotated puzzling triangel looks like
 
 ```haskell
 ((0,0),(0 % 1,0.0))
@@ -140,17 +163,8 @@ for example
 ((5,0),(5 % 1,5.0)) ((4,1),(21 % 5,4.2)) ((3,2),(18 % 5,3.6)) ((2,3),(18 % 5,3.6)) ((1,4),(21 % 5,4.2)) ((0,5),(5 % 1,5.0))
 ```
 
-similar to
-
-
-```haskell
-((0,0),0)
-((1,0),1) ((0,1),1)
-((2,0),1) ((1,1),2) ((0,2),1)
-((3,0),1) ((2,1),3) ((1,2),3) ((0,3),1)
-((4,0),1) ((3,1),4) ((2,2),6) ((1,3),4) ((0,4),1)
-((5,0),1) ((4,1),5) ((3,2),10) ((2,3),10) ((1,4),5) ((0,5),1)
-```
+where `(3 % 2,1.5)` is the *on average, correctly guessed percentage of bit values*, both as a rational number
+and as a real number.
 
 Using the triangle the integer `42` (following `41`) leading to the solution of the puzzle can be found extremely fast.
 
