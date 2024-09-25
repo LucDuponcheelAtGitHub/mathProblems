@@ -1,10 +1,9 @@
 module Pascal where
 
+import Functions
+import IO
 import Types
 
-import Functions
-
-import IO
 --
 -- pascal
 --
@@ -15,19 +14,27 @@ type PascalRow = Row PascalValue
 
 type PascalTriangle = Row PascalRow
 
+-- pascalTriangle :: PascalTriangle
+-- pascalTriangle =
+--   let first :: PascalRow
+--       first = [0]
+--       nextFunction :: PascalRow -> PascalRow
+--       nextFunction zs = [1] ++ zipWith (+) zs (tail zs) ++ [1]
+--    in forever nextFunction first
+
 pascalTriangle :: PascalTriangle
 pascalTriangle =
-  let first :: PascalRow
-      first = [0]
-      nextFunction :: PascalRow -> PascalRow
-      nextFunction zs = [1] ++ zipWith (+) zs (tail zs) ++ [1]
-   in forever nextFunction first
+  let prefix row = [1]
+      operation = (+)
+      postfix row = [1]
+      row= [0]
+   in triangle prefix operation postfix row
 
 type PascalArgument = Pair Int Int
 
 type PascalResult = PascalValue
 
-pascalFunction :: PascalArgument ->  PascalResult
+pascalFunction :: PascalArgument -> PascalResult
 pascalFunction (n, m) = pascalTriangle !! n !! m
 
 printPascalTriangleToRowAt :: Int -> IO ()
@@ -45,14 +52,15 @@ type PascalEntryTriangle = Triangle PascalEntry
 
 pascalEntryTriangle :: PascalEntryTriangle
 pascalEntryTriangle =
-  let first :: PascalEntryRow
-      first = [((0, 0), 0)]
-      nextFunction :: PascalEntryRow -> PascalEntryRow
-      nextFunction zs =
-        let (n, _) = fst (head zs)
-            ((n, m), z) +++ ((n', m'), z') = ((n, m'), z + z')
-         in [((n + 1, 0), 1)] ++ zipWith (+++) zs (tail zs) ++ [((0, n + 1), 1)]
-   in forever nextFunction first
+  let prefix row =
+        let (n, _) = fst (head row)
+         in [((n + 1, 0), 1)]
+      ((n, m), z) `operation` ((n', m'), z') = ((n, m'), z + z')
+      postfix row =
+        let (n, _) = fst (head row)
+         in [((0, n + 1), 1)]
+      row = [((0, 0), 0)]
+   in triangle prefix operation postfix row
 
 printPascalEntryRowAt :: Int -> IO ()
 printPascalEntryRowAt n = printRow (pascalEntryTriangle !! n)

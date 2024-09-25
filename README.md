@@ -124,10 +124,10 @@ The code is based upon https://www.cs.nott.ac.uk/~pszvc/g52afp/sudoku.lhs,
 
 ## Alice splits the bill not too generously with Bob
 
-My twin brother published this puzzle on
+My twin brother published this interesting puzzle on
 [PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128395/alice-splits-the-bill-not-too-generously-with-bob).
 
-I found it challenging use to `forever` (in fact just the standard `iterate` bu I added it for clarity) to build a
+I found it challenging use to `forever` (in fact just the standard `iterate` but I added it for clarity) to build a
 lazy infinite *puzzle triangle* similar to the well known *pascal triangle*.
 
 for example, similar to the pascal triangle
@@ -152,7 +152,7 @@ or, annotated with coordinates,
 ((5,0),1) ((4,1),5) ((3,2),10) ((2,3),10) ((1,4),5) ((0,5),1)
 ```
 
-the annotated puzzling triangel looks like
+the annotated puzzling triangle looks like
 
 ```haskell
 ((0,0),(0 % 1,0.0))
