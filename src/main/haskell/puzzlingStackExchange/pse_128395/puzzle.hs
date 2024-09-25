@@ -42,20 +42,20 @@ puzzleEntryTriangle =
       row = [((0, 0), 0)]
    in triangle prefix operation postfix row
 
--- convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), (Rational, Double))]]
--- convert = map (map (\((n, m), s) -> ((n, m), (s, fromRational s))))
-convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), Double)]]
-convert = map (map (\((n, m), s) -> ((n, m), fromRational s)))
+convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), (Rational, Double))]]
+convert = map (map (\((n, m), s) -> ((n, m), (s, fromRational s))))
+-- convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), Double)]]
+-- convert = map (map (\((n, m), s) -> ((n, m), fromRational s)))
 
 printPuzzleEntryTriangleToEntryRowAt :: Int -> IO ()
 printPuzzleEntryTriangleToEntryRowAt n = printTriangleToRowAt (n + 1) (convert puzzleEntryTriangle)
 
 printPuzzleEntryRowAt n = (mapM_ print . (!! n)) puzzleEntryTriangle
 
--- successMoreThan :: Double -> ((Int, Int), (Rational, Double)) -> Bool
--- successMoreThan d ((_, _), (_, s)) = s > d
-successMoreThan :: Double -> ((Int, Int), Double) -> Bool
-successMoreThan d ((_, _), s) = s > d
+successMoreThan :: Double -> ((Int, Int), (Rational, Double)) -> Bool
+successMoreThan d ((_, _), (_, s)) = s > d
+-- successMoreThan :: Double -> ((Int, Int), Double) -> Bool
+-- successMoreThan d ((_, _), s) = s > d
 
 solution :: Int -> Double -> IO ()
 solution n d = (print . last . takeWhile (successMoreThan d) . (!! n) . convert) puzzleEntryTriangle

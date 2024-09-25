@@ -14,20 +14,12 @@ type PascalRow = Row PascalValue
 
 type PascalTriangle = Row PascalRow
 
--- pascalTriangle :: PascalTriangle
--- pascalTriangle =
---   let first :: PascalRow
---       first = [0]
---       nextFunction :: PascalRow -> PascalRow
---       nextFunction zs = [1] ++ zipWith (+) zs (tail zs) ++ [1]
---    in forever nextFunction first
-
 pascalTriangle :: PascalTriangle
 pascalTriangle =
   let prefix row = [1]
       operation = (+)
       postfix row = [1]
-      row= [0]
+      row = [0]
    in triangle prefix operation postfix row
 
 type PascalArgument = Pair Int Int
