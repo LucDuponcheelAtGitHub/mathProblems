@@ -7,7 +7,7 @@ import Types
 --
 
 forever :: (z -> z) -> z -> Row z
-forever z2z z = forever z2z (z2z z)
+forever z2z z = z : forever z2z (z2z z)
 
 triangle :: (Row z -> Row z) -> (z -> z -> z) -> (Row z -> Row z) -> Row z -> Triangle z
 triangle prefix operation postfix row =
