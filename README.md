@@ -122,3 +122,48 @@ x is the maximum natural number.
 
 The code is based upon https://www.cs.nott.ac.uk/~pszvc/g52afp/sudoku.lhs,
 
+## Alice splits the bill not too generously with Bob
+
+My twin brother published this puzzle on
+[PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128395/alice-splits-the-bill-not-too-generously-with-bob).
+
+I found it challenging use `forever` to build a lazy infinite *puzzle triangle* similar to the well known *pascal triangle*.
+
+for example
+
+```haskell
+((0,0),(0 % 1,0.0))
+((1,0),(1 % 1,1.0)) ((0,1),(1 % 1,1.0))
+((2,0),(2 % 1,2.0)) ((1,1),(3 % 2,1.5)) ((0,2),(2 % 1,2.0))
+((3,0),(3 % 1,3.0)) ((2,1),(7 % 3,2.3333333333333335)) ((1,2),(7 % 3,2.3333333333333335)) ((0,3),(3 % 1,3.0))
+((4,0),(4 % 1,4.0)) ((3,1),(13 % 4,3.25)) ((2,2),(17 % 6,2.8333333333333335)) ((1,3),(13 % 4,3.25)) ((0,4),(4 % 1,4.0))
+((5,0),(5 % 1,5.0)) ((4,1),(21 % 5,4.2)) ((3,2),(18 % 5,3.6)) ((2,3),(18 % 5,3.6)) ((1,4),(21 % 5,4.2)) ((0,5),(5 % 1,5.0))
+```
+
+similar to
+
+
+```haskell
+((0,0),0)
+((1,0),1) ((0,1),1)
+((2,0),1) ((1,1),2) ((0,2),1)
+((3,0),1) ((2,1),3) ((1,2),3) ((0,3),1)
+((4,0),1) ((3,1),4) ((2,2),6) ((1,3),4) ((0,4),1)
+((5,0),1) ((4,1),5) ((3,2),10) ((2,3),10) ((1,4),5) ((0,5),1)
+```
+
+Using the triangle the integer `42` (following `41`) leading to the solution of the puzzle can be found extremely fast.
+
+```haskell
+$ time ./puzzle128395 
+((59,41),(6114634921008473035429070497 % 100582201066849840253175876,60.7924151206883))
+
+real    0m0.053s
+user    0m0.029s
+sys     0m0.015s
+```
+
+As a bonus I also programmed `fibonacci` using `forever`.
+
+
+
