@@ -27,14 +27,6 @@ main =
     putStrLn "==========================================================================================================================="
 
     putStrLn ""
-    putStrLn "printSolution (100, 60.0)"
-    putStrLn ""
-    printSolution (100, 60.0)
-    putStrLn ""
-
-    putStrLn "==========================================================================================================================="
-
-    putStrLn ""
     putStrLn "puzzleEntryRowAt 100"
     putStrLn ""
     printPuzzleEntryRowAt 100
@@ -46,6 +38,14 @@ main =
     putStrLn "puzzleEntryTriangleToEntryRowAt 5"
     putStrLn ""
     printPuzzleEntryTriangleToEntryRowAt 5
+    putStrLn ""
+
+    putStrLn "==========================================================================================================================="
+
+    putStrLn ""
+    putStrLn "printSolution (100, 60.0)"
+    putStrLn ""
+    printSolution (100, 60.0)
     putStrLn ""
 
     putStrLn "==========================================================================================================================="

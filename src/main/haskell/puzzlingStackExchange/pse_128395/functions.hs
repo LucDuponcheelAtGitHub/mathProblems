@@ -18,11 +18,11 @@ triangle prefix operation postfix topRow =
 
 -- most specific
 entryTriangle ::
-  (Row ((n, m), z) -> Row ((n, m), z)) ->
+  (EntryRow (n, m) z -> EntryRow (n, m) z) ->
   ((n, m) -> (z, z) -> z) ->
-  (Row ((n, m), z) -> Row ((n, m), z)) ->
-  Row ((n, m), z) ->
-  Triangle ((n, m), z)
+  (EntryRow (n, m) z -> EntryRow (n, m) z) ->
+  EntryRow (n, m) z ->
+  EntryTriangle (n, m) z  
 entryTriangle prefix operation postfix topRow =
   let ((n, m), z) `op` ((n', m'), z') = ((n, m'), (n', m') `operation` (z, z'))
    in triangle prefix op postfix topRow
