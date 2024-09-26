@@ -1,12 +1,11 @@
 module Fibonacci where
 
+import Functions
+import IO
 import Types
 
-import Functions
-
-import IO
 --
--- bonus: fibonacci
+-- fibonacci
 --
 
 type FibonacciValue = Value Int
@@ -30,5 +29,8 @@ type FibonacciResult = FibonacciValue
 fibonacciFunction :: FibonacciArgument -> FibonacciResult
 fibonacciFunction n = fibonacciRow !! n
 
+fibonacciRowToValueAt :: Int -> FibonacciRow
+fibonacciRowToValueAt n = take (n + 1) fibonacciRow
+
 printFibonacciRowToValueAt :: Int -> IO ()
-printFibonacciRowToValueAt n = printRowToValueAt (n + 1) fibonacciRow
+printFibonacciRowToValueAt = printRow . fibonacciRowToValueAt

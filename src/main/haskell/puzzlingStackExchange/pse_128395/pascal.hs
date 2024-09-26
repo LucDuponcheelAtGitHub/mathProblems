@@ -19,24 +19,26 @@ pascalTriangle =
   let prefix row = [1]
       operation = (+)
       postfix row = [1]
-      row = [0]
-   in triangle prefix operation postfix row
+      topRow = [0]
+   in triangle prefix operation postfix topRow
 
-type PascalArgument = Pair Int Int
+pascalRowAt :: Int -> PascalRow
+pascalRowAt n = (!! n) pascalTriangle
 
-type PascalResult = PascalValue
+pascalTriangleToRowAt :: Int -> PascalTriangle
+pascalTriangleToRowAt n = take (n + 1) pascalTriangle
 
-pascalFunction :: PascalArgument -> PascalResult
-pascalFunction (n, m) = pascalTriangle !! n !! m
+printPascalRowAt :: Int -> IO ()
+printPascalRowAt = printRow . pascalRowAt
 
 printPascalTriangleToRowAt :: Int -> IO ()
-printPascalTriangleToRowAt n = printTriangleToRowAt (n + 1) pascalTriangle
+printPascalTriangleToRowAt = printTriangle . pascalTriangleToRowAt
 
 --
 -- pascal entries
 --
 
-type PascalEntry = Entry PascalArgument PascalResult
+type PascalEntry = Entry (Int, Int) Int
 
 type PascalEntryRow = Row PascalEntry
 
@@ -47,15 +49,21 @@ pascalEntryTriangle =
   let prefix row =
         let (n, _) = fst (head row)
          in [((n + 1, 0), 1)]
-      ((n, m), z) `operation` ((n', m'), z') = ((n, m'), z + z')
+      (_, _) `operation` (z, z') = z + z'
       postfix row =
         let (n, _) = fst (head row)
          in [((0, n + 1), 1)]
-      row = [((0, 0), 0)]
-   in triangle prefix operation postfix row
+      topRow = [((0, 0), 0)]
+   in entryTriangle prefix operation postfix topRow
+
+pascalEntryRowAt :: Int -> PascalEntryRow
+pascalEntryRowAt n = (!! n) pascalEntryTriangle
+
+pascalEntryTriangleToEntryRowAt :: Int -> PascalEntryTriangle
+pascalEntryTriangleToEntryRowAt n = take (n + 1) pascalEntryTriangle
 
 printPascalEntryRowAt :: Int -> IO ()
-printPascalEntryRowAt n = printRow (pascalEntryTriangle !! n)
+printPascalEntryRowAt = printRow . pascalEntryRowAt
 
 printPascalEntryTriangleToEntryRowAt :: Int -> IO ()
-printPascalEntryTriangleToEntryRowAt n = printTriangleToRowAt (n + 1) pascalEntryTriangle
+printPascalEntryTriangleToEntryRowAt = printTriangle . pascalEntryTriangleToEntryRowAt

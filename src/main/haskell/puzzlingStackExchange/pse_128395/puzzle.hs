@@ -8,11 +8,7 @@ import Types
 -- puzzle entres
 --
 
-type PuzzleArgument = Pair Int Int
-
-type PuzzleResult = Rational
-
-type PuzzleEntry = Entry PuzzleArgument PuzzleResult
+type PuzzleEntry = Entry (Int, Int) Rational
 
 type PuzzleEntryRow = Row PuzzleEntry
 
@@ -23,39 +19,44 @@ puzzleEntryTriangle =
   let prefix row =
         let (n, _) = fst (head row)
          in [((n + 1, 0), fromIntegral (n + 1))]
-      ((n, m), z) `operation` ((n', m'), z')
-        | n' + 1 < m' =
-            let p = fromIntegral m' / (fromIntegral (n' + 1) + fromIntegral m')
-                s = p + (1 - p) * z' + p * z
-             in ((n, m'), s)
-        | n' + 1 > m' =
-            let p = fromIntegral (n' + 1) / (fromIntegral (n' + 1) + fromIntegral m')
-                s = p + p * z' + (1 - p) * z
-             in ((n, m'), s)
-        | m' == n' + 1 =
-            let p = 1 / 2
-                s = p + p * z' + p * z
-             in ((n, m'), s)
+      (n', m') `operation` (z, z') =
+        let rm' = fromIntegral m'
+            rn' = fromIntegral n' + 1
+            rs' = rn' + rm'
+            y
+              | n' + 1 < m' =
+                  let p = rm' / rs'
+                   in p + (1 - p) * z' + p * z
+              | n' + 1 > m' =
+                  let p = rn' / rs'
+                   in p + p * z' + (1 - p) * z
+              | m' == n' + 1 =
+                  let p = 1 / 2
+                   in p + p * z' + p * z
+         in y
       postfix row =
         let (n, _) = fst (head row)
          in [((0, n + 1), fromIntegral (n + 1))]
-      row = [((0, 0), 0)]
-   in triangle prefix operation postfix row
+      topRow = [((0, 0), 0)]
+   in entryTriangle prefix operation postfix topRow
 
-convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), (Rational, Double))]]
-convert = map (map (\((n, m), s) -> ((n, m), (s, fromRational s))))
--- convert :: [[((Int, Int), Rational)]] -> [[((Int, Int), Double)]]
--- convert = map (map (\((n, m), s) -> ((n, m), fromRational s)))
+puzzleEntryRowAt :: Int -> PuzzleEntryRow
+puzzleEntryRowAt n = (!! n) puzzleEntryTriangle
+
+puzzleEntryTriangleToEntryRowAt :: Int -> PuzzleEntryTriangle
+puzzleEntryTriangleToEntryRowAt n = take (n + 1) puzzleEntryTriangle
+
+printPuzzleEntryRowAt :: Int -> IO ()
+printPuzzleEntryRowAt = mapM_ print . puzzleEntryRowAt
 
 printPuzzleEntryTriangleToEntryRowAt :: Int -> IO ()
-printPuzzleEntryTriangleToEntryRowAt n = printTriangleToRowAt (n + 1) (convert puzzleEntryTriangle)
+printPuzzleEntryTriangleToEntryRowAt = printTriangle . puzzleEntryTriangleToEntryRowAt
 
-printPuzzleEntryRowAt n = (mapM_ print . (!! n)) puzzleEntryTriangle
+solution :: (Int, Double) -> ((Int, Int), (Rational, Double))
+solution (n, d) =
+  let convert = map (map (\((n, m), s) -> ((n, m), (s, fromRational s))))
+      successMoreThan d ((_, _), (_, s)) = s > d
+   in (last . takeWhile (successMoreThan d) . (!! n) . convert) puzzleEntryTriangle
 
-successMoreThan :: Double -> ((Int, Int), (Rational, Double)) -> Bool
-successMoreThan d ((_, _), (_, s)) = s > d
--- successMoreThan :: Double -> ((Int, Int), Double) -> Bool
--- successMoreThan d ((_, _), s) = s > d
-
-solution :: Int -> Double -> IO ()
-solution n d = (print . last . takeWhile (successMoreThan d) . (!! n) . convert) puzzleEntryTriangle
+printSolution :: (Int, Double) -> IO ()
+printSolution = print . solution
