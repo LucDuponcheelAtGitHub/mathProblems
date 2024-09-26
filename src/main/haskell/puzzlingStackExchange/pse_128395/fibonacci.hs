@@ -16,10 +16,10 @@ type FibonacciPair = Pair FibonacciValue FibonacciValue
 
 fibonacciRow :: FibonacciRow
 fibonacciRow =
-  let first :: FibonacciPair
-      first = (0, 1)
-      nextFunction :: FibonacciPair -> FibonacciPair
+  let nextFunction :: FibonacciPair -> FibonacciPair
       nextFunction (z, z') = (z', z + z')
+      first :: FibonacciPair
+      first = (0, 1)      
    in map fst (forever nextFunction first)
 
 type FibonacciArgument = Int

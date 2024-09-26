@@ -16,11 +16,11 @@ type PascalTriangle = Row PascalRow
 
 pascalTriangle :: PascalTriangle
 pascalTriangle =
-  let prefix row = [1]
-      operation = (+)
+  let operation = (+)
+      prefix row = [1]
       postfix row = [1]
       topRow = [0]
-   in triangle prefix operation postfix topRow
+   in triangle operation prefix postfix topRow
 
 pascalRowAt :: Int -> PascalRow
 pascalRowAt n = (!! n) pascalTriangle
@@ -46,15 +46,15 @@ type PascalEntryTriangle = Triangle PascalEntry
 
 pascalEntryTriangle :: PascalEntryTriangle
 pascalEntryTriangle =
-  let prefix row =
+  let (_, _) `operation` (z, z') = z + z'
+      prefix row =
         let (n, _) = fst (head row)
          in [((n + 1, 0), 1)]
-      (_, _) `operation` (z, z') = z + z'
       postfix row =
         let (n, _) = fst (head row)
          in [((0, n + 1), 1)]
       topRow = [((0, 0), 0)]
-   in entryTriangle prefix operation postfix topRow
+   in entryTriangle operation prefix postfix topRow
 
 pascalEntryRowAt :: Int -> PascalEntryRow
 pascalEntryRowAt n = (!! n) pascalEntryTriangle

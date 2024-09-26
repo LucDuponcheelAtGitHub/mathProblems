@@ -16,12 +16,9 @@ type PuzzleEntryTriangle = Triangle PuzzleEntry
 
 puzzleEntryTriangle :: PuzzleEntryTriangle
 puzzleEntryTriangle =
-  let prefix row =
-        let (n, _) = fst (head row)
-         in [((n + 1, 0), fromIntegral (n + 1))]
-      (n', m') `operation` (z, z') =
-        let rm' = fromIntegral m'
-            rn' = fromIntegral n' + 1
+  let (n', m') `operation` (z, z') =
+        let rm' = fromIntegral m' -- necessary conversion to Rational
+            rn' = fromIntegral n' + 1 -- necessary conversion to Rational
             rs' = rn' + rm'
             y
               | n' + 1 < m' =
@@ -34,11 +31,14 @@ puzzleEntryTriangle =
                   let p = 1 / 2
                    in p + p * z' + p * z
          in y
+      prefix row =
+        let (n, _) = fst (head row)
+         in [((n + 1, 0), fromIntegral (n + 1))]
       postfix row =
         let (n, _) = fst (head row)
          in [((0, n + 1), fromIntegral (n + 1))]
       topRow = [((0, 0), 0)]
-   in entryTriangle prefix operation postfix topRow
+   in entryTriangle operation prefix postfix topRow
 
 puzzleEntryRowAt :: Int -> PuzzleEntryRow
 puzzleEntryRowAt n = (!! n) puzzleEntryTriangle
