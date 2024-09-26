@@ -22,8 +22,7 @@ entryTriangle ::
   (EntryRow (n, m) z -> EntryRow (n, m) z) ->
   (EntryRow (n, m) z -> EntryRow (n, m) z) ->
   EntryRow (n, m) z ->
-  EntryTriangle (n, m) z  
+  EntryTriangle (n, m) z
 entryTriangle operation =
-  let ((n, m), z) `op` ((n', m'), z') = ((n, m'), (n', m') `operation` (z, z'))
-   in triangle op
-
+  let ((n, m), z) `operation'` ((n', m'), z') = ((n, m'), (n', m') `operation` (z, z'))
+   in triangle operation'

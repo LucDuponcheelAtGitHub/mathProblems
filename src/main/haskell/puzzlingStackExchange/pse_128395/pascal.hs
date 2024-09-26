@@ -47,12 +47,8 @@ type PascalEntryTriangle = Triangle PascalEntry
 pascalEntryTriangle :: PascalEntryTriangle
 pascalEntryTriangle =
   let (_, _) `operation` (z, z') = z + z'
-      prefix row =
-        let (n, _) = fst (head row)
-         in [((n + 1, 0), 1)]
-      postfix row =
-        let (n, _) = fst (head row)
-         in [((0, n + 1), 1)]
+      prefix row = [((fst (fst (head row)) + 1, 0), 1)]
+      postfix row = [((0, fst (fst (head row)) + 1 + 1), 1)]
       topRow = [((0, 0), 0)]
    in entryTriangle operation prefix postfix topRow
 
