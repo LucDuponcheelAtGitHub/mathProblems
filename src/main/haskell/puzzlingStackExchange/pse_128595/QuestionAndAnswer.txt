@@ -26,7 +26,7 @@ mpbs = man positions before him
 
 Proposition:
 
-The position p for the latecomer to join is the one with #ws persons before him.
+The position p for the latecomer to join is the one with #ws positions before it.
 
 Proof:
 
@@ -34,13 +34,13 @@ The proof follows from the lemma below.
 
 Lemma:
 
-When at position p, there is a bijection from wpas to mbps.
+When at position p, there is a bijection between wpas and mbps.
 
 Proof (by contradiction):
 
 Assume that there is no function from wpas to mbps.
 
-This implies that there is a wpa without a mbp.
+This implies that there is a wpa without an mbp.
 In that case there would be too many women.
 
 We can conclude that there is a function from wpas to mbps.
@@ -52,9 +52,7 @@ In that case there would be too many women.
 
 We can conclude that there is an injection from wpas to mbps.
 
-Assume that the injection is not an surjection from wpas to mbps.
-Let mbps' consist of the 
-
-In that case there are more than #ws persons before him. 
+Assume that the injection is not a surjection from wpas to mbps.
+In that case the position is one with more than #ws persons before it. 
 
 qed
