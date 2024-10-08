@@ -14,19 +14,23 @@ This implies that position n has n positions before it.
 
 Notation:
 
-#ws = number of women
-
 wpa = woman position after him
 
-wpas = woman positions after him
+wpas = (all) the woman positions after him
 
 mpb = man position before him
 
-mpbs = man positions before him
+mpbs = (all) the man positions before him
+
+wps = (all) the woman positions
+
+mps = (all) the man positions 
+
+#ws = the amount of women == #wps = the amount of women positions
 
 Proposition:
 
-The position p for the latecomer to join is the one with #ws positions before it.
+The position p for the latecomer to join is the one with #wps before it.
 
 Proof:
 
@@ -41,18 +45,18 @@ Proof (by contradiction):
 Assume that there is no function from wpas to mbps.
 
 This implies that there is a wpa without an mbp.
-In that case there would be too many women.
+In that case #wps would be too large.
 
 We can conclude that there is a function from wpas to mbps.
 
 Assume that the function is not an injection from wpas to mbps.
 
-This implies that there are two wpas mapped on one mbp.
-In that case there would be too many women.
+This implies that there are two wpa's mapped on one mbp.
+In that case #wps would also be too large.
 
 We can conclude that there is an injection from wpas to mbps.
 
 Assume that the injection is not a surjection from wpas to mbps.
-In that case the position is one with more than #ws positions before it. 
+In that case the position is one with more than #wps before it. 
 
 qed

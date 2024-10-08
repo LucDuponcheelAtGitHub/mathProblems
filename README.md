@@ -124,7 +124,7 @@ The code is based upon https://www.cs.nott.ac.uk/~pszvc/g52afp/sudoku.lhs,
 
 ## Alice splits the bill not too generously with Bob
 
-My twin brother published this interesting puzzle on
+My twin brother, Marc, published this interesting puzzle on
 [PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128395/alice-splits-the-bill-not-too-generously-with-bob).
 
 I found it challenging use to `forever` (in fact just the standard `iterate` but I added it for clarity) to build a
@@ -181,16 +181,17 @@ As a bonus I also programmed `fibonacci` using `forever`.
 
 ## From the 2011 South African Junior Olympiad
 
-My twin brother pointed me at this interesting puzzle on
+My twin brother, Marc, pointed me at this interesting puzzle on
 [PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128595/prove-that-it-is-always-possible-for-them-to-join-the-line-so-that-the-number-of).
 
 The solution is an amazingly simple one.
 
-The correct position is the one with the number of women in the line before him.
+The correct position is the one with "the amount of women in the line" persons before him.
 
 I found it challenging to use `fixedPointOf`, defined using `until` (in fact a rewritten version of the standard
-`unitil`), to let the latecomer move from an arbitrary position to the correct position.
+`until`), to let the latecomer move from an arbitrary position to the correct position.
 
-I also gave a proof of the correctnes of the correct position.
+I also gave a proof of the correctnes of the correct position (with many thanks to my twin brother, Marc, for pointing
+out some inaccuracies in the proof).
 
 
