@@ -1,0 +1,46 @@
+Question:
+
+From the 2011 South African Junior Olympiad:
+
+Several people line up in single file.
+A solitary latecomer wishes to join the queue.
+Prove that it is always possible for them to join the line somewhere
+so that the number of men in front of them is equal to the number of women behind them.
+
+Notation:
+
+#ws = number of women
+
+wpa = woman position after him
+
+wpas = woman positions after him
+
+mpb = man position before him
+
+mpbs = man positions before him
+
+Proposition:
+
+The position p for the latecomer to join is the one with #ws persons before him.
+
+Proof:
+
+The proof follows from the lemma below.
+
+Lemma:
+
+When at position p there is, for ever wpa, a unique mpb.
+
+Proof (by contradiction):
+
+Assume that the wpas, for which there is no unique mpb, is not empty.
+
+There are two possibilities:
+
+1. mbps is empty.
+In that case there would be too many women.
+
+2. mbps is not empty.
+In that case there is a wpa (in wpas) for which there is a unique mpb (in mbps).
+
+qed

@@ -179,5 +179,18 @@ sys     0m0.015s
 
 As a bonus I also programmed `fibonacci` using `forever`.
 
+## From the 2011 South African Junior Olympiad
+
+My twin brother pointed me at this interesting puzzle on
+[PuzzlingStackExchange](https://puzzling.stackexchange.com/questions/128595/prove-that-it-is-always-possible-for-them-to-join-the-line-so-that-the-number-of).
+
+The solution is an amazingly simple one.
+
+The correct position is the one with the number of women in the line before him.
+
+I found it challenging to use `fixedPointOf`, defined using `until` (in fact a rewritten version of the standard
+`unitil`), to let the latecomer move from an arbitrary position to the correct position.
+
+I also gave a proof of the correctnes of the correct position.
 
 

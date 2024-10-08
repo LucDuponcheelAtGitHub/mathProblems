@@ -50,7 +50,7 @@ puzzleEntryTriangleToEntryRowAt :: Int -> PuzzleEntryTriangle
 puzzleEntryTriangleToEntryRowAt n = take (n + 1) puzzleEntryTriangle
 
 printPuzzleEntryRowAt :: Int -> IO ()
-printPuzzleEntryRowAt = mapM_ print . puzzleEntryRowAt
+printPuzzleEntryRowAt = mapM_ (print . (\((n, m), s) -> ((n, m), fromRational s))) . puzzleEntryRowAt
 
 printPuzzleEntryTriangleToEntryRowAt :: Int -> IO ()
 printPuzzleEntryTriangleToEntryRowAt = printTriangle . puzzleEntryTriangleToEntryRowAt
