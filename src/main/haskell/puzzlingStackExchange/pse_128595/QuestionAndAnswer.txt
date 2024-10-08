@@ -53,6 +53,6 @@ In that case there would be too many women.
 We can conclude that there is an injection from wpas to mbps.
 
 Assume that the injection is not a surjection from wpas to mbps.
-In that case the position is one with more than #ws persons before it. 
+In that case the position is one with more than #ws positions before it. 
 
 qed
