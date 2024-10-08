@@ -1,6 +1,6 @@
 import Types ( Person (Man, Me, Woman) )
 
-import SpecificFunctions ( isWoman, movedToCorrectPositionIn, correctPositionIn, numberOfWomenIn)
+import SpecificFunctions ( isWoman, movedToCorrectIndexIn, correctIndexIn, numberOfWomenIn)
 
 import IO (printList)
 
@@ -17,14 +17,14 @@ main =
 
         putStrLn "================================================================="
 
-        putStrLn "moved to correct position in persons"
+        putStrLn "moved to correct index in persons"
         
-        printList (movedToCorrectPositionIn ps)
+        printList (movedToCorrectIndexIn ps)
 
         putStrLn "================================================================="
 
-        putStrLn "test if correct position is number of women (positions start from 0)"
+        putStrLn "test if correct index is number of women (indexs start from 0)"
         
-        print (correctPositionIn ps == numberOfWomenIn ps)
+        print (correctIndexIn ps == numberOfWomenIn ps)
 
         putStrLn "================================================================="

@@ -7,6 +7,11 @@ A solitary latecomer wishes to join the queue.
 Prove that it is always possible for them to join the line somewhere
 so that the number of men in front of them is equal to the number of women behind them.
 
+Warning:
+
+I use position as a synonym for index, where indices start from 0.
+This implies that position n has n positions before it.
+
 Notation:
 
 #ws = number of women

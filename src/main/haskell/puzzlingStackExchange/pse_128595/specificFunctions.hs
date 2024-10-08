@@ -34,8 +34,8 @@ move ps =
             then moveForward -- eiher one woman more after me or one man less before me
             else doNotMove
 
-movedToCorrectPositionIn = fixedPointOf move
+movedToCorrectIndexIn = fixedPointOf move
 
-correctPositionIn = elemIndex Me . movedToCorrectPositionIn
+correctIndexIn = elemIndex Me . movedToCorrectIndexIn
 
 numberOfWomenIn = Just . length . filter isWoman
