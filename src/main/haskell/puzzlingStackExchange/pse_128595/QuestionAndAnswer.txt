@@ -38,25 +38,25 @@ The proof follows from the lemma below.
 
 Lemma:
 
-When at position p, there is a bijection between wpas and mbps.
+When at position p, there is a bijection between wpas and mpbs.
 
 Proof (by contradiction):
 
-Assume that there is no function from wpas to mbps.
+Assume that there is no function from wpas to mpbs.
 
-This implies that there is a wpa without an mbp.
+This implies that there is a wpa without an mpb.
 In that case #wps would be too large.
 
-We can conclude that there is a function from wpas to mbps.
+We can conclude that there is a function from wpas to mpbs.
 
-Assume that the function is not an injection from wpas to mbps.
+Assume that the function is not an injection from wpas to mpbs.
 
-This implies that there are two wpa's mapped on one mbp.
+This implies that there are two wpa's mapped on one mpb.
 In that case #wps would also be too large.
 
-We can conclude that there is an injection from wpas to mbps.
+We can conclude that there is an injection from wpas to mpbs.
 
-Assume that the injection is not a surjection from wpas to mbps.
+Assume that the injection is not a surjection from wpas to mpbs.
 In that case the position is one with more than #wps before it. 
 
 qed
