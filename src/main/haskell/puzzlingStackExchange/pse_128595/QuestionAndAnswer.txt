@@ -14,49 +14,37 @@ This implies that position n has n positions before it.
 
 Notation:
 
-wpa = woman position after him
+wa = woman after him
+was = (all) the woman after him
+mb = man before him
+mbs = (all) the man before him
+ws = (all) the woman
+ms = (all) the man 
 
-wpas = (all) the woman positions after him
-
-mpb = man position before him
-
-mpbs = (all) the man positions before him
-
-wps = (all) the woman positions
-
-mps = (all) the man positions 
-
-#ws = the amount of women == #wps = the amount of women positions
+#xs stands for the number of elements of xs
 
 Proposition:
 
-The position p for the latecomer to join is the one with #wps before it.
+The position p for the latecomer to join is the one with #ws before it.
 
 Proof:
 
-The proof follows from the lemma below.
+If mbs is empty, then was is also empty and #mbs == #was
+
+If mbs is not empty, then there exists a function from was to mbs.
+
+The proof then follows from the lemma below.
 
 Lemma:
+The function from the proposition above is a bijection between was and mbs.
 
-When at position p, there is a bijection between wpas and mpbs.
+Proof(by contradiction):
 
-Proof (by contradiction):
+Assume that the function is not injective.
+This implies that there are two wa's mapped on one mb.
+In that case #ws would be too large.
 
-Assume that there is no function from wpas to mpbs.
-
-This implies that there is a wpa without an mpb.
-In that case #wps would be too large.
-
-We can conclude that there is a function from wpas to mpbs.
-
-Assume that the function is not an injection from wpas to mpbs.
-
-This implies that there are two wpa's mapped on one mpb.
-In that case #wps would also be too large.
-
-We can conclude that there is an injection from wpas to mpbs.
-
-Assume that the injection is not a surjection from wpas to mpbs.
-In that case the position is one with more than #wps before it. 
+Assume that the injection is not surjective.
+In that case the position is one with more than #ws positions before it. 
 
 qed
