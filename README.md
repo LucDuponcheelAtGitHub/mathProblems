@@ -200,9 +200,9 @@ out some inaccuracies in the proof).
 
 100 passengers take their `100` reserved, typically labeled, seats on a plane with exactly `100` (for this problem,
 identical) seats, one by one. The first passenger is confused and may have lost his boarding pass, and chooses a random
-seat. The next passengers are alert and have their boarding passes and proceed as follows: if their reserved seat is
-free, they take that seat, if not, they choose a random free seat. What is the probability that the last passenger ends
-up in the seat reserved for that passenger?
+seat, which turns out to be a wrong one. The next passengers are alert and have their boarding passes and proceed as
+follows: if their reserved seat is free, they take that seat, if not, they choose a random free seat. What is the
+probability that the last passenger ends up in the seat reserved for that passenger?
 
 **Answer**
 
