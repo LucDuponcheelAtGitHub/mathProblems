@@ -194,4 +194,32 @@ I found it challenging to use `fixedPointOf`, defined using `until` (in fact a r
 I also gave a proof of the correctnes of the correct position (with many thanks to my twin brother, Marc, for pointing
 out some inaccuracies in the proof).
 
+## Reserved seat occupation
+
+**Question**
+
+100 passengers take their `100` reserved, typically labeled, seats on a plane with exactly `100` (for this problem,
+identical) seats, one by one. The first passenger is confused and may have lost his boarding pass, and chooses a random
+seat. The next passengers are alert and have their boarding passes and proceed as follows: if their reserved seat is
+free, they take that seat, if not, they choose a random free seat. What is the probability that the last passenger ends
+up in the seat reserved for that passenger?
+
+**Answer**
+
+The answer generalizes `100` to `n`.
+
+The passenger whose seat is already occupied by the `1`st passenger can for every `m <- [2..n]`, with probability
+`1/(n-1)`, take as `m`th passenger a seat. If he takes a seat as `n`th passenger then he cannot sit at his seat, so
+only `m <- [2..(n-1)]` needs to be considered. The probability that he, as `m`th passenger, will sit at the  seat of
+the `1`st passenger who occupies his seat is `1/(n-m+1)`.
+
+Below is `Haskell` code.
+
+```haskell
+p n =
+  sum
+    [ (1 / fromIntegral (n - 1)) * (1 / fromIntegral (n - m + 1))
+      | m <- [2 .. (n - 1)]
+    ]
+```
 
