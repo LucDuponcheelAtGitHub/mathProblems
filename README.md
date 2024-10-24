@@ -210,8 +210,8 @@ The answer generalizes `100` to `n`.
 
 The passenger whose seat is already occupied by the `1`st passenger can for every `m <- [2..n]`, with probability
 `1/(n-1)`, take as `m`th passenger a seat. If he takes a seat as `n`th passenger then he cannot sit at his seat, so
-only `m <- [2..(n-1)]` needs to be considered. The probability that he, as `m`th passenger, will sit at the  seat of
-the `1`st passenger who occupies his seat is `1/(n-m+1)`.
+only `m <- [2..(n-1)]` needs to be considered. The probability that he, as `m`th passenger, will sit at the seat of the
+`1`st passenger who occupies his seat is `1/(n-m+1)`.
 
 Below is `Haskell` code.
 
