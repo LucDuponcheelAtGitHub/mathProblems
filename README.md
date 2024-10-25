@@ -200,26 +200,37 @@ out some inaccuracies in the proof).
 
 100 passengers take their `100` reserved, typically labeled, seats on a plane with exactly `100` (for this problem,
 identical) seats, one by one. The first passenger is confused and may have lost his boarding pass, and chooses a random
-seat, which turns out to be a wrong one. The next passengers are alert and have their boarding passes and proceed as
-follows: if their reserved seat is free, they take that seat, if not, they choose a random free seat. What is the
-probability that the last passenger ends up in the seat reserved for that passenger?
+seat. The next passengers are alert and have their boarding passes and proceed as follows: if their reserved seat is
+free, then they take that seat, if not, they choose a random free seat. What is the probability that the last passenger
+ends up in the seat reserved for that passenger?
 
 **Answer**
 
 The answer generalizes `100` to `n`.
 
-The passenger whose seat is already occupied by the `1`st passenger can for every `m <- [2..n]`, with probability
-`1/(n-1)`, take as `m`th passenger a seat. If he takes a seat as `n`th passenger then he cannot sit at his seat, so
-only `m <- [2..(n-1)]` needs to be considered. The probability that he, as `m`th passenger, will sit at the seat of the
-`1`st passenger who occupies his seat is `1/(n-m+1)`.
+Let's call the probability `p n`
+
+Clearly `p 2 = 1/2`.
+
+The `1`st passenger takes his seat with probability `1/n`. The passenger whose seat is already occupied by the `1`st
+passenger can, for every `m <- [2..n]`, with probability `1/(n-1)`, take a seat as `m`th passenger. If he takes a seat
+as `n`th passenger, then he cannot sit at his seat, so only `m <- [2..(n-1)]` needs to be considered. The answer then
+reduces `n-1` times, recursively, to `p (n-(m-1))`.
 
 Below is `Haskell` code.
 
 ```haskell
-p n =
-  sum
-    [ (1 / fromIntegral (n - 1)) * (1 / fromIntegral (n - m + 1))
-      | m <- [2 .. (n - 1)]
-    ]
+p 2 = 1/2
+p n = (1 + sum [ p (n-(m-1)) | m <- [2..(n-1)] ]) / fromIntegral n
 ```
 
+It is now easy to prove that `p n = 1/2` for all `n`.
+
+```haskell
+p n = (1 + sum [ p (n-(m-1)) | m <- [2..(n-1)] ]) / n
+    = (1 + sum [ 1/2 | m <- [2..(n-1)] ]) / n -- induction
+    = (1 + (n-2)/2) / n 
+    = (2 + (n-2)) / (2*n) 
+    = n / (2*n) 
+    = 1/2 
+```
