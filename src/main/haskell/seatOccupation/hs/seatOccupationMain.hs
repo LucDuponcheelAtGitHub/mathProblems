@@ -1,9 +1,6 @@
 module Main where
 
-import Data.List
-import GHC.Real (fromIntegral)
 import SeatOccupation (pd, pr)
-
 
 main :: IO ()
 main =
