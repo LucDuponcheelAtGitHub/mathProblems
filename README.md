@@ -234,28 +234,3 @@ p n = (1 + sum [ p (n-(m-1)) | m <- [2..(n-1)] ]) / n
     = n / (2*n) 
     = 1/2 
 ```
-
-Here is another proof of `p n = 1/2`
-
-**Lemma:**
-
-For all `2<=m<=n` there is, with probability p(n,m) = 1/(n-(m-1)), 
-1 occupier occupying a seat of a non-occupier
-
-```scala
-p(n,2)
-   = 1/(n-(2-1))
-   = 1/(n-1)
-   = the probability that the 1-st occupier occupies his seat
-
-p(n,m)
-   = p(n,m-1)*((n-(m-1)-1)/(n-(m-1)))
-    where   (n-(m-1)-1)/(n-(m-1))
-          = the probability that the m-th occupier
-            does not occupy seat of the occupier
-            of his seat
-   = (1/(n-((m-1)-1)))*((n-(m-1)-1)/(n-(m-1)))
-   = (1/(n-(m-1)))         
-           
-p(n,n-1) = 1/(n-(n-1-1)) = 1/2 
-```
