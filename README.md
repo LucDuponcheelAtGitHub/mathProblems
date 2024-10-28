@@ -251,7 +251,8 @@ p(n,2)
 p(n,m)
    = p(n,m-1)*((n-(m-1)-1)/(n-(m-1)))
     where   (n-(m-1)-1)/(n-(m-1))
-          = the probability that the m-th occupier does not occupy the occupier's seat
+          = the probability that the m-th occupier
+            does not occupy the occupier of his seat
    = (1/(n-((m-1)-1)))*((n-(m-1)-1)/(n-(m-1)))
    = (1/(n-(m-1)))         
            
